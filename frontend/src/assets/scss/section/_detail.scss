@@ -1,0 +1,119 @@
+#detail {
+    padding-top: 100px;
+    background-color: #111;
+    min-height: 100vh;
+
+    .detail__inner {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+    }
+
+    .detail__content {
+        display: flex;
+        gap: 40px;
+        margin-top: 40px;
+    }
+
+    .detail__left {
+        flex: 0 0 400px;
+
+        .show__image {
+            position: relative;
+            
+            img {
+                width: 100%;
+                border-radius: 8px;
+            }
+
+            .favorite-btn {
+                position: absolute;
+                top: 10px;
+                right: 10px;
+                background: rgba(0, 0, 0, 0.5);
+                border: none;
+                border-radius: 50%;
+                width: 32px;
+                height: 32px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+
+                .star-icon {
+                    font-size: 20px;
+                    color: #fff;
+
+                    &.active {
+                        color: #ffd700;
+                    }
+                }
+            }
+        }
+    }
+
+    .detail__right {
+        flex: 1;
+        color: #fff;
+
+        .show__title {
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 30px;
+        }
+
+        .show__info {
+            dl {
+                display: grid;
+                grid-template-columns: 100px 1fr;
+                gap: 15px;
+                margin-bottom: 30px;
+            }
+
+            dt {
+                color: #999;
+            }
+        }
+
+        .show__description {
+            margin-bottom: 30px;
+
+            h3 {
+                font-size: 20px;
+                margin-bottom: 15px;
+            }
+
+            p {
+                line-height: 1.6;
+                color: #ccc;
+            }
+        }
+
+        .show__buttons {
+            .booking-btn {
+                background-color: #f00;
+                color: #fff;
+                border: none;
+                padding: 15px 40px;
+                border-radius: 4px;
+                font-size: 16px;
+                cursor: pointer;
+                transition: background-color 0.3s ease;
+
+                &:hover {
+                    background-color: #d00;
+                }
+            }
+        }
+    }
+
+    @media screen and (max-width: 768px) {
+        .detail__content {
+            flex-direction: column;
+        }
+
+        .detail__left {
+            flex: none;
+        }
+    }
+}
