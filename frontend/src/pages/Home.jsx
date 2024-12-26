@@ -1,9 +1,16 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { AiTwotoneStar, AiOutlineStar } from "react-icons/ai";
+import { AiFillStar, AiOutlineStar, AiOutlineLeft, AiOutlineRight } from "react-icons/ai";
 
 const Home = () => {
     const [favorites, setFavorites] = useState({});
+    const [currentSlide, setCurrentSlide] = useState({
+        recommended: 0,
+        interpark: 0,
+        yes24: 0,
+        melon: 0,
+        ticketlink: 0
+    });
 
     const toggleFavorite = (e, id) => {
         e.preventDefault();
@@ -14,54 +21,70 @@ const Home = () => {
         }));
     };
 
+    const moveSlide = (section, direction) => {
+        const totalSlides = section === 'recommended' 
+            ? recommendedShows.length 
+            : ticketSites.find(site => site.id === section)?.shows.length || 0;
+        
+        const maxSlides = Math.ceil(totalSlides / 5) - 1;
+
+        setCurrentSlide(prev => ({
+            ...prev,
+            [section]: direction === 'next' 
+                ? Math.min(prev[section] + 1, maxSlides)
+                : Math.max(prev[section] - 1, 0)
+        }));
+    };
+
     const recommendedShows = [
         { id: "r1", title: "뮤지컬 라이온킹", image: "https://picsum.photos/200/280?random=1" },
         { id: "r2", title: "뮤지컬 위키드", image: "https://picsum.photos/200/280?random=2" },
         { id: "r3", title: "뮤지컬 데스노트", image: "https://picsum.photos/200/280?random=3" },
         { id: "r4", title: "뮤지컬 레미제라블", image: "https://picsum.photos/200/280?random=4" },
         { id: "r5", title: "뮤지컬 캣츠", image: "https://picsum.photos/200/280?random=5" },
+        { id: "r6", title: "뮤지컬 오페라의 유령", image: "https://picsum.photos/200/280?random=6" },
+        { id: "r7", title: "뮤지컬 맘마미아", image: "https://picsum.photos/200/280?random=7" },
+        { id: "r8", title: "뮤지컬 지킬앤하이드", image: "https://picsum.photos/200/280?random=8" },
+        { id: "r9", title: "뮤지컬 헤드윅", image: "https://picsum.photos/200/280?random=9" },
+        { id: "r10", title: "뮤지컬 아이다", image: "https://picsum.photos/200/280?random=10" },
     ];
 
     const ticketSites = [
         {
-            name: "인터파크",
-            shows: [
-                { id: "i1", title: "인터파크 공연1", image: "https://picsum.photos/200/280?random=11" },
-                { id: "i2", title: "인터파크 공연2", image: "https://picsum.photos/200/280?random=12" },
-                { id: "i3", title: "인터파크 공연3", image: "https://picsum.photos/200/280?random=13" },
-                { id: "i4", title: "인터파크 공연4", image: "https://picsum.photos/200/280?random=14" },
-                { id: "i5", title: "인터파크 공연5", image: "https://picsum.photos/200/280?random=15" },
-            ]
+            name: "인파파크",
+            id: "interpark",
+            shows: Array.from({ length: 10 }, (_, i) => ({
+                id: `i${i + 1}`,
+                title: `인터파크 공연${i + 1}`,
+                image: `https://picsum.photos/200/280?random=${11 + i}`
+            }))
         },
         {
             name: "예스24",
-            shows: [
-                { id: "o1", title: "예스24 공연1", image: "https://picsum.photos/200/280?random=21" },
-                { id: "o2", title: "예스24 공연2", image: "https://picsum.photos/200/280?random=22" },
-                { id: "o3", title: "예스24 공연3", image: "https://picsum.photos/200/280?random=23" },
-                { id: "o4", title: "예스24 공연4", image: "https://picsum.photos/200/280?random=24" },
-                { id: "o5", title: "예스24 공연5", image: "https://picsum.photos/200/280?random=25" },
-            ]
+            id: "yes24",
+            shows: Array.from({ length: 10 }, (_, i) => ({
+                id: `y${i + 1}`,
+                title: `예스24 공연${i + 1}`,
+                image: `https://picsum.photos/200/280?random=${21 + i}`
+            }))
         },
         {
             name: "멜론티켓",
-            shows: [
-                { id: "p1", title: "멜론티켓 공연1", image: "https://picsum.photos/200/280?random=31" },
-                { id: "p2", title: "멜론티켓 공연2", image: "https://picsum.photos/200/280?random=32" },
-                { id: "p3", title: "멜론티켓 공연3", image: "https://picsum.photos/200/280?random=33" },
-                { id: "p4", title: "멜론티켓 공연4", image: "https://picsum.photos/200/280?random=34" },
-                { id: "p5", title: "멜론티켓 공연5", image: "https://picsum.photos/200/280?random=35" },
-            ]
+            id: "melon",
+            shows: Array.from({ length: 10 }, (_, i) => ({
+                id: `m${i + 1}`,
+                title: `멜론티켓 공연${i + 1}`,
+                image: `https://picsum.photos/200/280?random=${31 + i}`
+            }))
         },
         {
             name: "티켓링크",
-            shows: [
-                { id: "q1", title: "티켓링크 공연1", image: "https://picsum.photos/200/280?random=41" },
-                { id: "q2", title: "티켓링크 공연2", image: "https://picsum.photos/200/280?random=42" },
-                { id: "q3", title: "티켓링크 공연3", image: "https://picsum.photos/200/280?random=43" },
-                { id: "q4", title: "티켓링크 공연4", image: "https://picsum.photos/200/280?random=44" },
-                { id: "q5", title: "티켓링크 공연5", image: "https://picsum.photos/200/280?random=45" },
-            ]
+            id: "ticketlink",
+            shows: Array.from({ length: 10 }, (_, i) => ({
+                id: `t${i + 1}`,
+                title: `티켓���크 공연${i + 1}`,
+                image: `https://picsum.photos/200/280?random=${41 + i}`
+            }))
         }
     ];
 
@@ -69,35 +92,18 @@ const Home = () => {
         <main id="main" role="main">
             <section className="ticket-site">
                 <h2 className="section__title">추천 공연</h2>
-                <div className="show__list">
-                    {recommendedShows.map((show) => (
-                        <div key={show.id} className="show__item">
-                            <Link to={`/detail/${show.id}`}>
-                                <div className="show__image-container">
-                                    <img src={show.image} alt={show.title} />
-                                    <button 
-                                        className="favorite-btn"
-                                        onClick={(e) => toggleFavorite(e, show.id)}
-                                    >
-                                        {favorites[show.id] ? (
-                                            <AiTwotoneStar className="star-icon active" />
-                                        ) : (
-                                            <AiOutlineStar className="star-icon" />
-                                        )}
-                                    </button>
-                                </div>
-                                <p>{show.title}</p>
-                            </Link>
-                        </div>
-                    ))}
-                </div>
-            </section>
-
-            {ticketSites.map((site) => (
-                <section key={site.name} className="ticket-site">
-                    <h2 className="section__title">{site.name}</h2>
-                    <div className="show__list">
-                        {site.shows.map((show) => (
+                <div className="show__list-container">
+                    <button 
+                        className="slide-btn prev" 
+                        onClick={() => moveSlide('recommended', 'prev')}
+                        disabled={currentSlide.recommended === 0}
+                    >
+                        <AiOutlineLeft />
+                    </button>
+                    <div className="show__list" style={{
+                        transform: `translateX(-${currentSlide.recommended * 100}%)`
+                    }}>
+                        {recommendedShows.map((show) => (
                             <div key={show.id} className="show__item">
                                 <Link to={`/detail/${show.id}`}>
                                     <div className="show__image-container">
@@ -107,7 +113,7 @@ const Home = () => {
                                             onClick={(e) => toggleFavorite(e, show.id)}
                                         >
                                             {favorites[show.id] ? (
-                                                <AiTwotoneStar className="star-icon active" />
+                                                <AiFillStar className="star-icon active" />
                                             ) : (
                                                 <AiOutlineStar className="star-icon" />
                                             )}
@@ -117,6 +123,59 @@ const Home = () => {
                                 </Link>
                             </div>
                         ))}
+                    </div>
+                    <button 
+                        className="slide-btn next" 
+                        onClick={() => moveSlide('recommended', 'next')}
+                        disabled={currentSlide.recommended >= (recommendedShows.length / 5) - 1}
+                    >
+                        <AiOutlineRight />
+                    </button>
+                </div>
+            </section>
+
+            {ticketSites.map((site) => (
+                <section key={site.id} className="ticket-site">
+                    <h2 className="section__title">{site.name}</h2>
+                    <div className="show__list-container">
+                        <button 
+                            className="slide-btn prev" 
+                            onClick={() => moveSlide(site.id, 'prev')}
+                            disabled={currentSlide[site.id] === 0}
+                        >
+                            <AiOutlineLeft />
+                        </button>
+                        <div className="show__list" style={{
+                            transform: `translateX(-${currentSlide[site.id] * 100}%)`
+                        }}>
+                            {site.shows.map((show) => (
+                                <div key={show.id} className="show__item">
+                                    <Link to={`/detail/${show.id}`}>
+                                        <div className="show__image-container">
+                                            <img src={show.image} alt={show.title} />
+                                            <button 
+                                                className="favorite-btn"
+                                                onClick={(e) => toggleFavorite(e, show.id)}
+                                            >
+                                                {favorites[show.id] ? (
+                                                    <AiFillStar className="star-icon active" />
+                                                ) : (
+                                                    <AiOutlineStar className="star-icon" />
+                                                )}
+                                            </button>
+                                        </div>
+                                        <p>{show.title}</p>
+                                    </Link>
+                                </div>
+                            ))}
+                        </div>
+                        <button 
+                            className="slide-btn next" 
+                            onClick={() => moveSlide(site.id, 'next')}
+                            disabled={currentSlide[site.id] >= (site.shows.length / 5) - 1}
+                        >
+                            <AiOutlineRight />
+                        </button>
                     </div>
                 </section>
             ))}

@@ -1,5 +1,5 @@
 .login {
-    padding-top: 100px;
+    padding-top: 150px;
     min-height: 100vh;
     background-color: #111;
 
@@ -46,7 +46,7 @@
     button {
         width: 100%;
         padding: 12px;
-        background-color: #007bff;
+        background-color: #028b6bc1;
         color: #fff;
         border: none;
         border-radius: 4px;
@@ -54,7 +54,7 @@
         font-size: 16px;
 
         &:hover {
-            background-color: #0056b3;
+            background-color: #028B6B;
         }
     }
 
@@ -70,7 +70,7 @@
         justify-content: space-between;
 
         a {
-            color: #007bff;
+            color: #028B6B;
             text-decoration: none;
             
             &:hover {

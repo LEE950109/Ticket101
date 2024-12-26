@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { AiTwotoneStar, AiOutlineStar } from "react-icons/ai";
+import { AiFillStar, AiOutlineStar } from "react-icons/ai";
 
 const Detail = () => {
     const { id } = useParams();
@@ -23,11 +23,30 @@ const Detail = () => {
         age: "8세 이상",
         cast: "김OO, 이OO, 박OO",
         description: "브로드웨이 최고의 뮤지컬...",
+        youtubeUrl: "https://youtube.com/watch?v=...",
+        ticketLinks: [
+            { site: "인터파크", url: "https://tickets.interpark.com/..." },
+            { site: "YES24", url: "http://ticket.yes24.com/..." }
+        ],
+        rating: 5,
+        additionalInfo: {
+            notice: "관련 유튜브 영상",
+            externalLink: "티켓 URL",
+            bookingGuide: "별점 및 리뷰"
+        }
     }
 
     return (
         <main id="detail" role="main">
             <div className="detail__inner">
+                <div className="show__header">
+                    <h1 className="show__title">{showDetail.title}</h1>
+                    <div className="show__date-location">
+                        <span>{showDetail.date}</span>
+                        <span>{showDetail.location}</span>
+                    </div>
+                </div>
+                
                 <div className="detail__content">
                     <div className="detail__left">
                         <div className="show__image">
@@ -37,25 +56,21 @@ const Detail = () => {
                                 onClick={toggleFavorite}
                             >
                                 {isFavorite ? (
-                                    <AiTwotoneStar className="star-icon active" />
+                                    <AiFillStar className="star-icon active" />
                                 ) : (
                                     <AiOutlineStar className="star-icon" />
                                 )}
                             </button>
                         </div>
                     </div>
+                    
                     <div className="detail__right">
-                        <h2 className="show__title">{showDetail.title}</h2>
                         <div className="show__info">
                             <dl>
-                                <dt>공연기간</dt>
-                                <dd>{showDetail.date}</dd>
-                                <dt>공연장소</dt>
-                                <dd>{showDetail.location}</dd>
-                                <dt>관람시간</dt>
-                                <dd>{showDetail.runningTime}</dd>
                                 <dt>관람연령</dt>
                                 <dd>{showDetail.age}</dd>
+                                <dt>관람시간</dt>
+                                <dd>{showDetail.runningTime}</dd>
                                 <dt>출연진</dt>
                                 <dd>{showDetail.cast}</dd>
                                 <dt>가격</dt>
@@ -66,11 +81,34 @@ const Detail = () => {
                             <h3>공연소개</h3>
                             <p>{showDetail.description}</p>
                         </div>
+                        <div className="show__rating">
+                            <h3>별점 및 리뷰</h3>
+                            <div className="stars">
+                                {[...Array(5)].map((_, index) => (
+                                    <AiFillStar 
+                                        key={index}
+                                        className={index < showDetail.rating ? "active" : ""}
+                                    />
+                                ))}
+                            </div>
+                        </div>
                         <div className="show__buttons">
                             <button className="booking-btn">예매하기</button>
                         </div>
                     </div>
                 </div>
+            </div>
+            
+            <div className="detail__video">
+                <iframe 
+                    width="100%" 
+                    height="700" 
+                    src="https://www.youtube.com/embed/NpRzm7TTXok?autoplay=1&mute=1&start=60"
+                    title={showDetail.title}
+                    frameBorder="0" 
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                    allowFullScreen
+                ></iframe>
             </div>
         </main>
     )

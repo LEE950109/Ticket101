@@ -60,7 +60,6 @@
                     width: 100%;
                     height: 100%;
                     object-fit: cover;
-                    border-radius: 8px;
                 }
             }
 
@@ -70,20 +69,195 @@
                 white-space: nowrap;
                 overflow: hidden;
                 text-overflow: ellipsis;
+                margin-bottom: 24px;
+            }
+        }
+
+        .favorite__item-wrapper {
+            position: relative;
+            
+            .favorite__item {
+                // ... existing code ...
+
+                .show__title {
+                    font-size: 14px;
+                    text-align: center;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    margin-bottom: 10px;
+                    padding-right: 24px;
+                }
+            }
+
+            .remove-favorite {
+                position: absolute;
+                bottom: 10px;
+                right: 0;
+                width: 24px;
+                height: 24px;
+                color: #fff;
+                font-size: 15px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                transition: all 0.2s ease;
+                background: none;
+                border: none;
+                text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+
+                &:hover {
+                    color: #555(74, 74, 74);
+                    transform: scale(1.1);
+                }
             }
         }
     }
 
     .calendar__container {
-        min-height: 300px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border: 2px dashed #333;
-        border-radius: 8px;
+        background: #1E1E1E;
+        padding: 20px;
+        border-radius: 12px;
+        
+        .fc {
+            color: #fff;
 
-        .placeholder {
-            color: #666;
+            * {
+                border: none !important;
+            }
+
+            .fc-scrollgrid {
+                border: none !important;
+            }
+
+            .fc-col-header {
+                border: none !important;
+            }
+
+            .fc-toolbar {
+                margin-bottom: 1.5em;
+
+                .fc-button {
+                    background: none !important;
+                    border: none !important;
+                    padding: 8px 4px;
+                    color: #777;
+                    
+                    &:hover {
+                        color: #999;
+                        background: none !important;
+                        transform: scale(1.1);
+                    }
+
+                    &:focus {
+                        box-shadow: none !important;
+                    }
+
+                    .fc-icon {
+                        font-size: 2em;
+                    }
+                }
+
+                .fc-button-group {
+                    gap: 0px;
+                }
+
+                .fc-toolbar-title {
+                    font-size: 1.4em;
+                    font-weight: 600;
+                    color: #d8d8d8;
+                }
+            }
+
+            .fc-col-header-cell {
+                background: #222;
+                padding: 8px 0;
+                color: #666;
+
+                &-cushion {
+                    padding: 4px;
+                    font-weight: 500;
+                    font-size: 0.9em;
+                }
+            }
+
+            .fc-daygrid-day {
+                background: #1E1E1E;
+                position: relative;
+
+                &:nth-child(n) {
+                    border: none !important;
+                    border-color: transparent !important;
+                }
+
+                &-number {
+                    color: #d8d8d8;
+                    font-weight: 100;
+                    font-size: 0.75em;
+                    padding: 0px 0 0 0px;
+                    text-align: left;
+                }
+            }
+
+            .fc-event {
+                background: #e8cf30;
+                border: none;
+                border-radius: 4px;
+                padding: 4px 8px;
+                margin: 2px 0;
+                
+                .fc-event-title {
+                    font-weight: 500;
+                }
+                
+                &:hover {
+                    cursor: pointer;
+                    background: #e8d030bd;
+                }
+            }
+
+            .fc-day-today {
+                background: #333 !important;
+            }
+
+            .fc-day-other {
+                background: #1A1A1A;
+                .fc-daygrid-day-number {
+                    padding: 8px 0 0 8px;
+                    text-align: left;
+                }
+            }
+
+            .fc-day-sun .fc-daygrid-day-number {
+                color: #fe7f7f;
+                padding: 8px 0 0 8px;
+                text-align: left;
+            }
+            
+            .fc-day-sat .fc-daygrid-day-number {
+                color: #7878ff;
+                padding: 8px 0 0 8px;
+                text-align: left;
+            }
+
+            .fc-daygrid-month-view {
+                tr:last-child {
+                    .fc-daygrid-day {
+                        height: 50px;
+                    }
+                }
+            }
+
+            .fc-daygrid-more-link {
+                color: #028B6B;
+                font-size: 12px;
+                
+                &:hover {
+                    color: #03a17f99;
+                    text-decoration: none;
+                }
+            }
         }
     }
 
@@ -92,7 +266,7 @@
         justify-content: center;
 
         .edit__button {
-            background-color: #f00;
+            background-color: #028b6bc1;
             color: #fff;
             border: none;
             padding: 12px 30px;
@@ -102,7 +276,7 @@
             transition: background-color 0.3s ease;
 
             &:hover {
-                background-color: #d00;
+                background-color: #028B6B;
             }
         }
     }
@@ -110,6 +284,21 @@
     @media screen and (max-width: 768px) {
         .favorite__list {
             grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+        }
+
+        .calendar__container {
+            padding: 10px;
+            
+            .fc {
+                .fc-toolbar-title {
+                    font-size: 1.2em;
+                }
+                
+                .fc-button {
+                    padding: 6px 10px;
+                    font-size: 0.9em;
+                }
+            }
         }
     }
 }
