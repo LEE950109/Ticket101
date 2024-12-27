@@ -9,7 +9,7 @@
         padding: 40px;
         background-color: var(--black200);
         border-radius: 8px;
-        box-shadow: 0 0 10px var(--black300);
+       
 
         h2 {
             color: var(--white100);
@@ -35,10 +35,13 @@
             border-radius: 4px;
             background-color: var(--black200);
             color: var(--white100);
+            transition: all 0.3s ease;
             
             &:focus {
                 outline: none;
                 border-color: var(--black300);
+                background-color: var(--white200);
+                color: var(--black);
             }
         }
     }

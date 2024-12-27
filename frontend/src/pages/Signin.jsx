@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { signUp, confirmSignUp } from 'aws-amplify/auth';
 
-const SignIn = () => {
+const Signin = () => {
     const [formData, setFormData] = useState({
         email: '',
         password: '',
@@ -55,7 +55,7 @@ const SignIn = () => {
             });
             
             console.log('회원가입 성공:', user);
-            setShowVerification(true); // 회원가입 성공 시 인증 코드 입력 폼 표시
+            setShowVerification(true);
             setError('');
             
         } catch (error) {
@@ -77,89 +77,88 @@ const SignIn = () => {
     };
 
     return (
-        <div className="signin">
+        <section id="signin">
             <div className="signin__inner">
                 <h2>회원가입</h2>
                 {error && <p className="error-message">{error}</p>}
                 
                 {showVerification ? (
                     <form onSubmit={handleVerification}>
-                        <div className="form-group">
-                            <label htmlFor="verificationCode">인증 코드</label>
-                            <input
-                                type="text"
-                                id="verificationCode"
-                                name="verificationCode"
-                                value={formData.verificationCode}
-                                onChange={handleChange}
-                                placeholder="이메일로 받은 인증 코드를 입력하세요"
-                                required
-                            />
-                        </div>
-                        <button type="submit" className="signin__button">
-                            인증하기
-                        </button>
+                        <fieldset>
+                            <legend className="blind">인증 코드 확인</legend>
+                            <div className="form-group">
+                                <label htmlFor="verificationCode">인증 코드</label>
+                                <input
+                                    type="text"
+                                    id="verificationCode"
+                                    name="verificationCode"
+                                    value={formData.verificationCode}
+                                    onChange={handleChange}
+                                    placeholder="이메일로 받은 인증 코드를 입력하세요"
+                                    required
+                                />
+                            </div>
+                            <button type="submit">인증하기</button>
+                        </fieldset>
                     </form>
                 ) : (
                     <form onSubmit={handleSubmit}>
-                        <div className="form-group">
-                            <label htmlFor="email">이메일</label>
-                            <input
-                                type="email"
-                                id="email"
-                                name="email"
-                                value={formData.email}
-                                onChange={handleChange}
-                                placeholder="이메일을 입력하세요"
-                                required
-                            />
-                        </div>
-                        <div className="form-group">
-                            <label htmlFor="password">비밀번호</label>
-                            <input
-                                type="password"
-                                id="password"
-                                name="password"
-                                value={formData.password}
-                                onChange={handleChange}
-                                placeholder="비밀번호를 입력하세요"
-                                required
-                            />
-                        </div>
-                        <div className="form-group">
-                            <label htmlFor="confirmPassword">비밀번호 확인</label>
-                            <input
-                                type="password"
-                                id="confirmPassword"
-                                name="confirmPassword"
-                                value={formData.confirmPassword}
-                                onChange={handleChange}
-                                placeholder="비밀번호를 다시 입력하세요"
-                                required
-                            />
-                        </div>
-                        <button 
-                            type="submit" 
-                            className="signin__button"
-                            onClick={(e) => {
-                                console.log('회원가입 버튼 클릭됨');
-                                handleSubmit(e);
-                            }}
-                        >
-                            회원가입
-                        </button>
+                        <fieldset>
+                            <legend className="blind">회원가입 폼</legend>
+                            <div className="form-group">
+                                <label htmlFor="youEmail">이메일</label>
+                                <input 
+                                    type="email"
+                                    id="youEmail"
+                                    name="email"
+                                    placeholder="이메일을 입력해주세요."
+                                    value={formData.email}
+                                    onChange={handleChange}
+                                    required
+                                />
+                            </div>
+                            <div className="form-group">
+                                <label htmlFor="youPass">비밀번호</label>
+                                <input 
+                                    type="password"
+                                    id="youPass"
+                                    name="password"
+                                    placeholder="비밀번호를 입력해주세요."
+                                    value={formData.password}
+                                    onChange={handleChange}
+                                    required
+                                />
+                            </div>
+                            <div className="form-group">
+                                <label htmlFor="youPassC"></label>
+                                <input 
+                                    type="password"
+                                    id="youPassC"
+                                    name="confirmPassword"
+                                    placeholder="비밀번호를 다시 한번 입력해주세요."
+                                    value={formData.confirmPassword}
+                                    onChange={handleChange}
+                                    required
+                                />
+                            </div>
+                            <button type="submit">회원가입</button>
+                        </fieldset>
                     </form>
                 )}
-            </div>
-            
-            {showVerification && (
-                <div className="verification-help">
-                    <p>이메일로 전송된 인증 코드를 입력해주세요.</p>
-                    <p>인증 코드를 받지 못하셨나요? <button onClick={() => handleSubmit}>코드 재전송</button></p>
-                </div>
-            )}
-        </div>
-    );
-};
 
-export default SignIn;
+                {showVerification && (
+                    <div className="verification-info">
+                        <p>이메일로 전송된 인증 코드를 입력해주세요.</p>
+                        <button onClick={handleSubmit} className="resend-button">코드 재전송</button>
+                    </div>
+                )}
+
+                <div className="signin__footer">
+                    <p>이미 계정이 있으신가요? <a href="/login">로그인</a></p>
+                </div>
+            </div>
+        </section>
+    );
+}
+
+export default Signin;

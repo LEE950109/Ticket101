@@ -1,0 +1,120 @@
+#signin {
+    padding-top: 150px;
+    min-height: 100vh;
+    background-color: var(--black100);
+
+    .signin__inner {
+        max-width: 400px;
+        margin: 0 auto;
+        padding: 40px;
+        background-color: var(--black200);
+        border-radius: 8px;
+        
+        h2 {
+            color: var(--white100);
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 24px;
+        }
+
+        fieldset {
+            border: 0;
+            padding: 0;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+
+            label {
+                display: block;
+                color: var(--white100);
+                margin-bottom: 3px;
+            }
+        }
+
+        input {
+            width: 100%;
+            background-color: var(--black200);
+            border: 1px solid var(--black300);
+            padding: 1rem;
+            border-radius: 4px;
+            color: var(--white100);
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+
+            &::placeholder {
+                color: var(--white500);
+            }
+
+            &:focus {
+                border-color: var(--black);
+                outline: none;
+                background-color: var(--white200);
+                color: var(--black);
+            }
+        }
+
+        button {
+            width: 100%;
+            background-color: var(--ticket300);
+            color: var(--white100);
+            border: 0;
+            padding: 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 1rem;
+            
+
+            &:hover {
+                background-color: var(--ticket200);
+            }
+        }
+
+        .error-message {
+            color: var(--calendar-sun);
+            text-align: center;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .verification-info {
+            text-align: center;
+            margin-top: 1rem;
+            color: var(--white300);
+
+            p {
+                margin-bottom: 0.5rem;
+            }
+
+            .resend-button {
+                background: none;
+                border: none;
+                color: var(--white);
+                text-decoration: underline;
+                cursor: pointer;
+                padding: 0;
+                font-size: 0.9rem;
+
+                &:hover {
+                    color: var(--white200);
+                }
+            }
+        }
+    }
+
+    .signin__footer {
+        text-align: center;
+        margin-top: 1rem;
+        color: var(--white300);
+
+        a {
+            color: var(--white);
+            text-decoration: none;
+            margin-left: 0.5rem;
+
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+    }
+} 
