@@ -1,39 +1,25 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import { AiFillStar, AiOutlineStar } from "react-icons/ai";
+import { showDetails } from '../Data/detail';
 
 const Detail = () => {
     const { id } = useParams();
     const [isFavorite, setIsFavorite] = useState(false);
+    const [showDetail, setShowDetail] = useState(null);
+
+    useEffect(() => {
+        const detail = showDetails.find(show => show.id === id);
+        setShowDetail(detail);
+    }, [id]);
 
     const toggleFavorite = (e) => {
         e.preventDefault();
         setIsFavorite(!isFavorite);
     };
 
-    // 실제로는 API나 데이터베이스에서 가져올 데이터
-    const showDetail = {
-        id: id,
-        title: "뮤지컬 라이온킹",
-        image: "https://picsum.photos/400/560?random=1",
-        date: "2024.03.01 - 2024.05.31",
-        location: "예술의전당",
-        price: "60,000원 ~ 140,000원",
-        runningTime: "150분",
-        age: "8세 이상",
-        cast: "김OO, 이OO, 박OO",
-        description: "브로드웨이 최고의 뮤지컬...",
-        youtubeUrl: "https://youtube.com/watch?v=...",
-        ticketLinks: [
-            { site: "인터파크", url: "https://tickets.interpark.com/..." },
-            { site: "YES24", url: "http://ticket.yes24.com/..." }
-        ],
-        rating: 5,
-        additionalInfo: {
-            notice: "관련 유튜브 영상",
-            externalLink: "티켓 URL",
-            bookingGuide: "별점 및 리뷰"
-        }
+    if (!showDetail) {
+        return <div>Loading...</div>;
     }
 
     return (

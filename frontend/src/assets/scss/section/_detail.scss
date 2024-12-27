@@ -1,11 +1,11 @@
 #detail {
     padding-top: 120px;
-    background-color: #111111;
+    background-color: var(--black100);
     min-height: 100vh;
 
     .detail__video {
         width: 100%;
-        background: #111111;
+        background: var(--black100);
         margin-bottom: 40px;
         padding: 10% 10%;
         
@@ -30,18 +30,18 @@
             font-size: 32px;
             font-weight: bold;
             margin-bottom: 15px;
-            color: #e1dfdf;
+            color: var(--white100);
         }
         
         .show__date-location {
-            color: #cfcfcf;
+            color: var(--white200);
             font-size: 16px;
             
             span {
                 &:after {
                     content: '|';
                     margin: 0 10px;
-                    color: #ddd;
+                    color: var(--white200);
                 }
                 
                 &:last-child:after {
@@ -68,7 +68,7 @@
             img {
                 width: 100%;
                 border-radius: 0px;
-                box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+                box-shadow: 0 4px 10px var(--black400);
             }
 
             .favorite-btn {
@@ -82,16 +82,16 @@
                 
                 .star-icon {
                     font-size: 24px;
-                    color: #666;
+                    color: var(--white200);
                     transition: color 0.3s ease;
                     
                     &.active {
-                        color: #ffd700;
+                        color: var(--star);
                     }
                 }
 
                 &:hover .star-icon {
-                    color: #ffd700;
+                    color: var(--star);
                 }
             }
         }
@@ -99,10 +99,10 @@
 
     .detail__right {
         flex: 1;
-        color: #b8b7b7;
+        color: var(--white200);
 
         .show__info {
-            background: #2f2f2fba;
+            background: var(--black200);
             padding: 30px;
             border-radius: 3px;
             margin-bottom: 40px;
@@ -113,13 +113,13 @@
                 gap: 15px;
                 
                 dt {
-                    color: #d5d5d5;
+                    color: var(--white200);
                     font-weight: 500;
                     font-size: 15px;
                 }
                 
                 dd {
-                    color: #d5d5d5;
+                    color: var(--white200);
                     font-size: 15px;
                 }
             }
@@ -135,14 +135,14 @@
 
             p {
                 line-height: 1.6;
-                color: #ccc;
+                color: var(--white200);
             }
         }
 
         .show__buttons {
             .booking-btn {
                 background-color: #f00;
-                color: #fff;
+                color: var(--white);
                 border: none;
                 padding: 15px 40px;
                 border-radius: 4px;
@@ -176,16 +176,16 @@
                 }
                 
                 a {
-                    color: #fff;
+                    color: var(--white100);
                     text-decoration: none;
                     display: inline-block;
                     padding: 8px 15px;
-                    background: rgba(255, 255, 255, 0.1);
+                    background: var(--black200);
                     border-radius: 4px;
                     transition: background 0.3s ease;
                     
                     &:hover {
-                        background: rgba(255, 255, 255, 0.2);
+                        background: var(--black300);
                     }
                 }
             }
@@ -208,10 +208,10 @@
                 
                 svg {
                     font-size: 24px;
-                    color: #666;
+                    color: var(--white400);
                     
                     &.active {
-                        color: #ffd700;
+                        color: var(--star);
                     }
                 }
             }

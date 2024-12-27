@@ -1,8 +1,8 @@
 #mypage {
     padding-top: 100px;
-    background-color: #111;
+    background-color: var(--black100);
     min-height: 100vh;
-    color: #fff;
+    color: var(--white);
 
     .mypage__inner {
         max-width: 1200px;
@@ -17,7 +17,7 @@
     }
 
     .mypage__section {
-        background-color: #1a1a1a;
+        background-color: var(--black200);
         border-radius: 8px;
         padding: 20px;
         margin-bottom: 30px;
@@ -34,7 +34,7 @@
 
             .count {
                 margin-left: 10px;
-                background-color: #333;
+                background-color: var(--black300);
                 padding: 2px 8px;
                 border-radius: 12px;
                 font-size: 14px;
@@ -47,37 +47,26 @@
         grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
         gap: 20px;
 
-        .favorite__item {
-            text-decoration: none;
-            color: #fff;
-
-            .show__image {
-                width: 100%;
-                aspect-ratio: 1/1.4;
-                margin-bottom: 10px;
-                
-                img {
-                    width: 100%;
-                    height: 100%;
-                    object-fit: cover;
-                }
-            }
-
-            .show__title {
-                font-size: 14px;
-                text-align: center;
-                white-space: nowrap;
-                overflow: hidden;
-                text-overflow: ellipsis;
-                margin-bottom: 24px;
-            }
-        }
-
         .favorite__item-wrapper {
             position: relative;
-            
+
             .favorite__item {
-                // ... existing code ...
+                text-decoration: none;
+                color: var(--white);
+                display: block;
+
+                .show__image {
+                    width: 100%;
+                    aspect-ratio: 1/1.4;
+                    margin-bottom: 10px;
+                    
+                    img {
+                        width: 100%;
+                        height: 100%;
+                        object-fit: cover;
+                        border-radius: 8px;
+                    }
+                }
 
                 .show__title {
                     font-size: 14px;
@@ -85,178 +74,92 @@
                     white-space: nowrap;
                     overflow: hidden;
                     text-overflow: ellipsis;
-                    margin-bottom: 10px;
                     padding-right: 24px;
                 }
             }
 
             .remove-favorite {
                 position: absolute;
-                bottom: 10px;
                 right: 0;
-                width: 24px;
-                height: 24px;
-                color: #fff;
-                font-size: 15px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                cursor: pointer;
-                transition: all 0.2s ease;
+                bottom: -5px;
+            
                 background: none;
                 border: none;
-                text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+                padding: 4px 8px;
+                color: var(--white);
+                cursor: pointer;
+                font-size: 16px;
+                opacity: 0.7;
+                transition: opacity 0.2s;
 
                 &:hover {
-                    color: #555(74, 74, 74);
-                    transform: scale(1.1);
+                    opacity: 1;
                 }
             }
         }
     }
 
     .calendar__container {
-        background: #1E1E1E;
+        background: var(--black300);
         padding: 20px;
         border-radius: 12px;
         
         .fc {
-            color: #fff;
-
-            * {
-                border: none !important;
-            }
-
-            .fc-scrollgrid {
-                border: none !important;
-            }
-
-            .fc-col-header {
-                border: none !important;
-            }
-
-            .fc-toolbar {
-                margin-bottom: 1.5em;
-
-                .fc-button {
-                    background: none !important;
-                    border: none !important;
-                    padding: 8px 4px;
-                    color: #777;
-                    
-                    &:hover {
-                        color: #999;
-                        background: none !important;
-                        transform: scale(1.1);
-                    }
-
-                    &:focus {
-                        box-shadow: none !important;
-                    }
-
-                    .fc-icon {
-                        font-size: 2em;
-                    }
-                }
-
-                .fc-button-group {
-                    gap: 0px;
-                }
-
-                .fc-toolbar-title {
-                    font-size: 1.4em;
-                    font-weight: 600;
-                    color: #d8d8d8;
-                }
-            }
-
-            .fc-col-header-cell {
-                background: #222;
-                padding: 8px 0;
-                color: #666;
-
-                &-cushion {
-                    padding: 4px;
-                    font-weight: 500;
-                    font-size: 0.9em;
-                }
-            }
-
-            .fc-daygrid-day {
-                background: #1E1E1E;
-                position: relative;
-
-                &:nth-child(n) {
-                    border: none !important;
-                    border-color: transparent !important;
-                }
-
-                &-number {
-                    color: #d8d8d8;
-                    font-weight: 100;
-                    font-size: 0.75em;
-                    padding: 0px 0 0 0px;
-                    text-align: left;
-                }
-            }
-
-            .fc-event {
-                background: #e8cf30;
-                border: none;
-                border-radius: 4px;
-                padding: 4px 8px;
-                margin: 2px 0;
-                
-                .fc-event-title {
-                    font-weight: 500;
-                }
-                
-                &:hover {
-                    cursor: pointer;
-                    background: #e8d030bd;
-                }
-            }
-
-            .fc-day-today {
-                background: #333 !important;
-            }
-
-            .fc-day-other {
-                background: #1A1A1A;
-                .fc-daygrid-day-number {
-                    padding: 8px 0 0 8px;
-                    text-align: left;
-                }
-            }
-
-            .fc-day-sun .fc-daygrid-day-number {
-                color: #fe7f7f;
-                padding: 8px 0 0 8px;
-                text-align: left;
-            }
+            // 기본 스타일 초기화
+            --fc-border-color: var(--black500);        // 테두리 색상
+            --fc-page-bg-color: var(--black300);       // 배경 색상
+            --fc-neutral-bg-color: var(--black300);    // 중립 배경
+            --fc-today-bg-color: var(--black400);      // 오늘 배경
             
-            .fc-day-sat .fc-daygrid-day-number {
-                color: #7878ff;
-                padding: 8px 0 0 8px;
-                text-align: left;
-            }
+            // 텍스트 색상
+            color: var(--white200);
+            font-size: 12px;
 
-            .fc-daygrid-month-view {
-                tr:last-child {
-                    .fc-daygrid-day {
-                        height: 50px;
-                    }
-                }
-            }
-
-            .fc-daygrid-more-link {
-                color: #028B6B;
-                font-size: 12px;
+            // 헤더 스타일
+            .fc-toolbar-title {
+                color: var(--white);
+                font-size: 25px;
                 
+            }
+            .fc-daygrid-day {
+                height: 100px !important;  // 셀 높이 고정
+            }
+
+            // 이전/다음 버튼
+            .fc-button {
+                background: none;
+                border: none;
+                color: var(--white300);
+
                 &:hover {
-                    color: #03a17f99;
-                    text-decoration: none;
+                    color: var(--white);
                 }
+
+                &:focus {
+                    box-shadow: 0 0 0 0.2rem var(--black300) !important;  // 포커스 효과 색상 변경
+                }
+
+                &.fc-button-active {
+                    background: var(--black300) !important;  // 활성화 상태 배경색
+                }
+
+                &:active {
+                    background: var(--black300) !important;  // 클릭시 배경색
+                }
+            }
+
+            // 주말 색상
+            .fc-day-sun { color: var(--calendar-sun); }
+            .fc-day-sat { color: var(--calendar-sat); }
+
+            // 이벤트 스타일
+            .fc-event {
+                background: var(--ticket300);
+                border: none;
+                border-radius: 2px;
+                font-size: 15px;
+                padding: 4px;
+                text-align: center;  
             }
         }
     }
@@ -266,8 +169,8 @@
         justify-content: center;
 
         .edit__button {
-            background-color: #028b6bc1;
-            color: #fff;
+            background-color: var(--ticket300);
+            color: var(--white);
             border: none;
             padding: 12px 30px;
             border-radius: 4px;
@@ -276,7 +179,7 @@
             transition: background-color 0.3s ease;
 
             &:hover {
-                background-color: #028B6B;
+                background-color: var(--ticket00);
             }
         }
     }
@@ -284,21 +187,6 @@
     @media screen and (max-width: 768px) {
         .favorite__list {
             grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-        }
-
-        .calendar__container {
-            padding: 10px;
-            
-            .fc {
-                .fc-toolbar-title {
-                    font-size: 1.2em;
-                }
-                
-                .fc-button {
-                    padding: 6px 10px;
-                    font-size: 0.9em;
-                }
-            }
         }
     }
 }

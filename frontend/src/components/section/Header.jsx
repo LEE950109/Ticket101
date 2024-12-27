@@ -7,12 +7,16 @@ const Header = () => {
             <div className='header__inner'>
                 <nav className='header__nav left'>
                     <ul>
-                        <li><Link to='/'>Ticket101</Link></li>
+                        <li>
+                            <Link to='/'>
+                                <img src="/로고.png" alt="Ticket101" />
+                            </Link>
+                        </li>
                     </ul>
                 </nav>
                 <div className='header__logo'>
                     <Link to='/'>
-                        <img src="/검은배경 로고(전체).png" alt="Ticket101" />
+                        <img src="/로고 글씨.png" alt="Ticket101" />
                     </Link>
                 </div>
                 <nav className='header__nav right'>

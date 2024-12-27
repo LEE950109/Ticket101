@@ -5,7 +5,7 @@
     width: 100%;
     height: 100px;
     z-index: 10000;
-    background-color: #111111;
+    background-color: var(--black100);
 
     .header__inner {
         display: flex;
@@ -37,6 +37,19 @@
     .header__nav {
         &.left {
             margin-right: auto;
+            display: flex;
+            align-items: center;
+            padding: 35px 20px;
+            
+            img {
+                height: 30px;
+                width: auto;
+                animation: logoAnimation 2s ease-in-out infinite;
+                
+                &:hover {
+                    animation-play-state: paused;
+                }
+            }
         }
         
         &.right {
@@ -52,11 +65,24 @@
         }
         
         a {
-            color: #fff;
+            color: var(--white100);
             text-decoration: none;
+            font-size: 14px;
             &:hover {
-                color: #ccc;
+                color: var(--white200);
             }
         }
+    }
+}
+
+@keyframes logoAnimation {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(0.9);
+    }
+    100% {
+        transform: scale(1);
     }
 }

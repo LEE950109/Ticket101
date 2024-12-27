@@ -2,7 +2,7 @@
     .section__title {
         font-size: 24px;
         font-weight: bold;
-        color: #fff;
+        color: var(--white100);
         margin: 40px 20px 20px;
     }
 
@@ -59,12 +59,12 @@
                 
                 svg {
                     font-size: 24px;
-                    color: #fff;
-                    filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.5));
+                    color: var(--white100);
+                    filter: drop-shadow(0 0 2px var(--black300));
                     transition: all 0.3s ease;
                     
                     &.active {
-                        color: #ffd700;
+                        color: var(--star);
                         transform: scale(1.2);
                     }
                 }
@@ -72,7 +72,7 @@
         }
 
         p {
-            color: #fff;
+            color: var(--white100);
             margin-top: 10px;
             text-align: center;
             font-size: 14px;
@@ -87,7 +87,7 @@
         top: 0;
         bottom: 0;
         background: transparent;
-        color: white;
+        color: var(--white100);
         border: none;
         cursor: pointer;
         z-index: 10;
@@ -99,20 +99,20 @@
         
         svg {
             font-size: 24px;
-            filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.5));
+            filter: drop-shadow(0 0 2px var(--black100));
         }
         
         &:hover {
-            background: rgba(0, 0, 0, 0.2);
+            background: var(--black200);
         }
         
         &.prev { 
             left: 0;
-            background: linear-gradient(to right, rgba(0,0,0,0.3), transparent);
+            background: linear-gradient(to right, var(--black200), transparent);
         }
         &.next { 
             right: 0; 
-            background: linear-gradient(to left, rgba(0,0,0,0.3), transparent);
+            background: linear-gradient(to left, var(--black200), transparent);
         }
         
         &:disabled {

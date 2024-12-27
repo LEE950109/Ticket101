@@ -2,14 +2,9 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
+import { favoriteShows } from '../Data/mypage';
 
 const Mypage = () => {
-    // 즐겨찾기한 공연 목록 (예시 데이터)
-    const favoriteShows = [
-        { id: "r1", title: "뮤지컬 라이온킹", image: "https://picsum.photos/200/280?random=1", date: "2024-03-15" },
-        { id: "r2", title: "뮤지컬 위키드", image: "https://picsum.photos/200/280?random=2", date: "2024-03-20" },
-    ];
-
     // 캘린더에 표시할 이벤트 데이터로 변환
     const calendarEvents = favoriteShows.map(show => ({
         title: show.title,
