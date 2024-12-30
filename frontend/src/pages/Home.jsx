@@ -1,10 +1,10 @@
-import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import React, { useState, useEffect } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import { AiFillStar, AiOutlineStar, AiOutlineLeft, AiOutlineRight } from "react-icons/ai";
 import { recommendedPerformances, ticketSites } from '../Data/home';
 
 const Home = () => {
-    const [favorites, setFavorites] = useState({});
+    const [favorites, setFavorites] = useState([]);
     const [currentSlide, setCurrentSlide] = useState({
         recommended: 0,
         interpark: 0,
@@ -12,14 +12,37 @@ const Home = () => {
         melon: 0,
         ticketlink: 0
     });
+    const navigate = useNavigate();
 
-    const toggleFavorite = (e, id) => {
+    useEffect(() => {
+        // localStorage에서 즐겨찾기 목록 가져오기
+        const storedFavorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+        setFavorites(storedFavorites);
+    }, []);
+
+    const handleFavorite = (e, show) => {
         e.preventDefault();
         e.stopPropagation();
-        setFavorites(prev => ({
-            ...prev,
-            [id]: !prev[id]
-        }));
+
+        const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+        if (!isLoggedIn) {
+            alert('로그인이 필요한 서비스입니다.');
+            navigate('/login');
+            return;
+        }
+
+        const currentFavorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+        const isAlreadyFavorite = currentFavorites.some(fav => fav.id === show.id);
+        
+        let updatedFavorites;
+        if (isAlreadyFavorite) {
+            updatedFavorites = currentFavorites.filter(fav => fav.id !== show.id);
+        } else {
+            updatedFavorites = [...currentFavorites, show];
+        }
+        
+        localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
+        setFavorites(updatedFavorites);
     };
 
     const moveSlide = (section, direction) => {
@@ -59,9 +82,9 @@ const Home = () => {
                                         <img src={show.image} alt={show.title} />
                                         <button 
                                             className="favorite-btn"
-                                            onClick={(e) => toggleFavorite(e, show.id)}
+                                            onClick={(e) => handleFavorite(e, show)}
                                         >
-                                            {favorites[show.id] ? (
+                                            {favorites.some(fav => fav.id === show.id) ? (
                                                 <AiFillStar className="star-icon active" />
                                             ) : (
                                                 <AiOutlineStar className="star-icon" />
@@ -104,9 +127,9 @@ const Home = () => {
                                             <img src={show.image} alt={show.title} />
                                             <button 
                                                 className="favorite-btn"
-                                                onClick={(e) => toggleFavorite(e, show.id)}
+                                                onClick={(e) => handleFavorite(e, show)}
                                             >
-                                                {favorites[show.id] ? (
+                                                {favorites.some(fav => fav.id === show.id) ? (
                                                     <AiFillStar className="star-icon active" />
                                                 ) : (
                                                     <AiOutlineStar className="star-icon" />
@@ -121,7 +144,7 @@ const Home = () => {
                         <button 
                             className="slide-btn next" 
                             onClick={() => moveSlide(site.id, 'next')}
-                            disabled={currentSlide[site.id] >= (site.shows.length / 5) - 1}
+                            disabled={currentSlide[site.id] >= Math.ceil(site.shows.length / 5) - 1}
                         >
                             <AiOutlineRight />
                         </button>
@@ -129,7 +152,7 @@ const Home = () => {
                 </section>
             ))}
         </main>
-    )
-}
+    );
+};
 
-export default Home
+export default Home;
