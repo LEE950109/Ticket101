@@ -1,18 +1,19 @@
 @charset "UTF-8";
 
 // setting
-@import "setting/fonts";
-@import "setting/vars";
-@import "setting/reset";
-@import "setting/mixin";
-@import "setting/common";
+@import './setting/fonts';
+@import './setting/vars';
+@import './setting/reset';
+@import './setting/mixin';
+@import './setting/common';
 
-@import "section/layout";
-@import "section/header";
-@import "section/main";
-@import "section/footer";
-@import "section/home";
-@import "section/login";
-@import "section/detail";
-@import "section/mypage";
-@import "section/signin";
+// section
+@import './section/layout';
+@import './section/header';
+@import './section/main';
+@import './section/footer';
+@import './section/home';
+@import './section/login';
+@import './section/detail';
+@import './section/mypage';
+@import './section/signin';

@@ -39,7 +39,7 @@ const Home = () => {
 
     return (
         <main id="main" role="main">
-            <section className="ticket-site">
+            <section>
                 <h2 className="section__title">추천 공연</h2>
                 <div className="show__list-container">
                     <button 
@@ -52,7 +52,7 @@ const Home = () => {
                     <div className="show__list" style={{
                         transform: `translateX(-${currentSlide.recommended * 100}%)`
                     }}>
-                        {recommendedPerformances.map((show) => (
+                        {recommendedPerformances.map(show => (
                             <div key={show.id} className="show__item">
                                 <Link to={`/detail/${show.id}`}>
                                     <div className="show__image-container">
@@ -76,15 +76,15 @@ const Home = () => {
                     <button 
                         className="slide-btn next" 
                         onClick={() => moveSlide('recommended', 'next')}
-                        disabled={currentSlide.recommended >= (recommendedPerformances.length / 5) - 1}
+                        disabled={currentSlide.recommended >= Math.ceil(recommendedPerformances.length / 5) - 1}
                     >
                         <AiOutlineRight />
                     </button>
                 </div>
             </section>
 
-            {ticketSites.map((site) => (
-                <section key={site.id} className="ticket-site">
+            {ticketSites.map(site => (
+                <section key={site.id}>
                     <h2 className="section__title">{site.name}</h2>
                     <div className="show__list-container">
                         <button 
@@ -97,7 +97,7 @@ const Home = () => {
                         <div className="show__list" style={{
                             transform: `translateX(-${currentSlide[site.id] * 100}%)`
                         }}>
-                            {site.shows.map((show) => (
+                            {site.shows.map(show => (
                                 <div key={show.id} className="show__item">
                                     <Link to={`/detail/${show.id}`}>
                                         <div className="show__image-container">

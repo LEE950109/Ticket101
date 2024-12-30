@@ -1,14 +1,7 @@
-export const favoriteShows = [
-    { 
-        id: "r1", 
-        title: "뮤지컬 라이온킹", 
-        image: "https://picsum.photos/200/280?random=1", 
-        date: "2024-12-15" 
-    },
-    { 
-        id: "r2", 
-        title: "뮤지컬 위키드", 
-        image: "https://picsum.photos/200/280?random=2", 
-        date: "2024-12-20" 
-    }
-];
+import { tempUserData } from './tempUserData';
+
+// tempUserData에서 favorites 데이터 가져오기
+export const favoriteShows = tempUserData.testUser.favorites;
+
+// 추가로 필요한 경우 upcomingShows도 export 가능
+export const upcomingShows = tempUserData.testUser.upcomingShows;
