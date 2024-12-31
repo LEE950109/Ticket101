@@ -18,7 +18,7 @@ const Login = () => {
             [e.target.name]: e.target.value
         });
     };
-
+    //수정된 부분 << 데이터 받아오는 부분이랑 error 처리 부분 다름
     const handleVerification = async (e) => {
         e.preventDefault();
         try {
@@ -36,37 +36,29 @@ const Login = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        
         try {
-            const { isSignedIn } = await signIn({
-                username: formData.email,
-                password: formData.password
+            const response = await fetch('http://localhost:5002/api/auth/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData),
             });
+
+            const data = await response.json();
             
-            if (isSignedIn) {
-                const user = await getCurrentUser();
-                const userData = {
-                    email: formData.email,
-                    userId: user.userId || user.username,
-                    ...user.attributes
-                };
-                
-                localStorage.setItem('isLoggedIn', 'true');
-                localStorage.setItem('userData', JSON.stringify(userData));
-                window.dispatchEvent(new Event('storage'));
+            if (response.ok) {
+                localStorage.setItem('userId', data.userId);
+                console.log('로그인 성공, userId:', data.userId);
+                alert('로그인 성공!');
                 navigate('/');
+            } else {
+                alert(data.message || '로그인에 실패했습니다.');
             }
         } catch (error) {
             console.error('로그인 에러:', error);
-            if (error.code === 'UserNotConfirmedException') {
-                setShowVerification(true);
-                setError('이메일 인증이 필요합니다. 인증 코드를 입력해주세요.');
-            } else if (error.code === 'NotAuthorizedException') {
-                setError('이메일 또는 비밀번호가 올바르지 않습니다.');
-            } else if (error.code === 'UserNotFoundException') {
-                setError('등록되지 않은 이메일입니다.');
-            } else {
-                setError(`로그인 실패: ${error.message}`);
-            }
+            alert('서버 연결에 실패했습니다.');
         }
     };
 

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { signUp, confirmSignUp } from 'aws-amplify/auth';
+import { signUp, signIn, confirmSignUp, signOut } from 'aws-amplify/auth';
 
 const Signin = () => {
     const [formData, setFormData] = useState({
@@ -20,6 +20,120 @@ const Signin = () => {
         });
     };
 
+    const handleVerification = async (e) => {
+        e.preventDefault();
+        try {
+            // 1. 기존 세션 정리
+            try {
+                await signOut();
+                localStorage.removeItem('userId');
+            } catch (signOutError) {
+                console.log('기존 세션 정리 중 에러:', signOutError);
+            }
+
+            // 2. 인증 코드 확인
+            await confirmSignUp({
+                username: formData.email,
+                confirmationCode: formData.verificationCode
+            });
+            
+            console.log('인증 코드 확인 성공');
+
+            // 3. 로그인 시도
+            const signInResponse = await signIn({
+                username: formData.email,
+                password: formData.password
+            });
+
+            console.log('로그인 성공:', signInResponse);
+
+            // 4. 백엔드에서 userId 가져오기
+            const userResponse = await fetch('http://localhost:5002/api/auth/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    email: formData.email
+                })
+            });
+
+            if (!userResponse.ok) {
+                const errorText = await userResponse.text();
+                console.error('백엔드 응답:', errorText);
+                throw new Error('사용자 정보를 가져오는데 실패했습니다.');
+            }
+
+            const userData = await userResponse.json();
+            console.log('백엔드에서 받은 사용자 정보:', userData);
+            
+            // userId로 체크 (백엔드 응답 구조에 맞춤)
+            if (userData.userId === undefined || userData.userId === null) {
+                throw new Error('유효하지 않은 사용자 ID입니다.');
+            }
+
+            // userId 저장
+            localStorage.setItem('userId', userData.userId.toString());
+            console.log('저장된 userId:', localStorage.getItem('userId'));
+            
+            // 기본 선호도 조사 페이지로 이동 (/preferences/basic)
+            alert('회원가입이 완료되었습니다. 선호도 조사를 진행해주세요.');
+            navigate('/preferences/basic');  // 다시 basic으로 수정
+            
+        } catch (error) {
+            console.error('인증/로그인 에러:', error);
+            setError(error.message || '인증 과정에서 오류가 발생했습니다.');
+        }
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        
+        try {
+            console.log('회원가입 시도:', formData.email);
+
+            const signUpResponse = await signUp({
+                username: formData.email,
+                password: formData.password,
+                options: {
+                    userAttributes: {
+                        email: formData.email
+                    }
+                }
+            });
+
+            console.log('Cognito 응답 전체:', signUpResponse);
+            console.log('Cognito userId:', signUpResponse.userId);
+
+            // DB 저장 시도 - userSub 대신 userId 사용
+            const response = await fetch('http://localhost:5002/api/auth/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    email: formData.email,
+                    cognitoId: signUpResponse.userId  // userSub -> userId로 변경
+                }),
+            });
+
+            console.log('서버 응답 상태:', response.status);
+            const data = await response.json();
+            console.log('서버 응답 데이터:', data);
+            
+            if (response.ok) {
+                localStorage.setItem('userId', data.userId);
+                setShowVerification(true);
+                console.log('인증 화면으로 전환');
+            } else {
+                throw new Error(data.message || '회원가입 실패');
+            }
+        } catch (error) {
+            console.error('회원가입 에러:', error);
+            alert(error.message || '회원가입에 실패했습니다.');
+        }
+    };
+    /*
     const handleVerification = async (e) => {
         e.preventDefault();
         try {
@@ -75,7 +189,7 @@ const Signin = () => {
             }
         }
     };
-
+*/
     return (
         <section id="signin">
             <div className="signin__inner">
