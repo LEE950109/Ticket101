@@ -90,65 +90,55 @@ const PreferencesBasic = () => {
   };
 
   return (
-    <div className="min-h-screen bg-black flex flex-col items-center justify-center p-4">
-      <div className="w-full max-w-md mx-auto">
-        <h1 className="text-4xl font-bold text-[#40E0D0] text-center mb-12">Ticket 101</h1>
-        <div className="bg-[#1a1a1a] p-8 rounded-lg shadow-xl">
-          <h2 className="text-2xl font-bold mb-8 text-white text-center">기본 정보 입력</h2>
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div>
-              <label className="block text-gray-300 text-sm font-bold mb-2">성별</label>
-              <select 
-                className="w-full p-3 bg-[#2a2a2a] text-white border border-gray-600 rounded-lg focus:outline-none focus:border-[#40E0D0]"
-                value={formData.gender}
-                onChange={(e) => setFormData({...formData, gender: e.target.value})}
-                required
-              >
-                <option value="">선택해주세요</option>
-                <option value="male">남성</option>
-                <option value="female">여성</option>
-                <option value="other">기타</option>
-              </select>
-            </div>
-
-            <div>
-              <label className="block text-gray-300 text-sm font-bold mb-2">나이</label>
-              <input
-                type="number"
-                className="w-full p-3 bg-[#2a2a2a] text-white border border-gray-600 rounded-lg focus:outline-none focus:border-[#40E0D0]"
-                value={formData.age}
-                onChange={(e) => setFormData({...formData, age: e.target.value})}
-                required
-                min="1"
-                max="120"
-                placeholder="나이를 입력하세요"
-              />
-            </div>
-
-            <div>
-              <label className="block text-gray-300 text-sm font-bold mb-2">지역</label>
-              <select
-                className="w-full p-3 bg-[#2a2a2a] text-white border border-gray-600 rounded-lg focus:outline-none focus:border-[#40E0D0]"
-                value={formData.region}
-                onChange={(e) => setFormData({...formData, region: e.target.value})}
-                required
-              >
-                <option value="">선택해주세요</option>
-                {regions.map(region => (
-                  <option key={region} value={region}>{region}</option>
-                ))}
-              </select>
-            </div>
-
-            <button
-              type="submit"
-              className="w-full bg-[#40E0D0] text-black py-3 rounded-lg font-bold
-                       hover:bg-[#3bcdc1] transition duration-200 ease-in-out mt-8"
+    <div className="preferences">
+      <div className="preferences__inner">
+        <h1>맞춤 공연 설문 조사</h1>
+        <h2>더 정확한 공연 추천을 위해<br/>
+        간단한 정보를 입력해주세요</h2>
+        <form onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label>성별</label>
+            <select 
+              value={formData.gender}
+              onChange={(e) => setFormData({...formData, gender: e.target.value})}
+              required
             >
-              다음
-            </button>
-          </form>
-        </div>
+              <option value="">선택해주세요</option>
+              <option value="male">남성</option>
+              <option value="female">여성</option>
+              <option value="other">기타</option>
+            </select>
+          </div>
+
+          <div className="form-group">
+            <label>나이</label>
+            <input
+              type="number"
+              value={formData.age}
+              onChange={(e) => setFormData({...formData, age: e.target.value})}
+              required
+              min="1"
+              max="120"
+              placeholder="나이를 입력하세요"
+            />
+          </div>
+
+          <div className="form-group">
+            <label>지역</label>
+            <select
+              value={formData.region}
+              onChange={(e) => setFormData({...formData, region: e.target.value})}
+              required
+            >
+              <option value="">선택해주세요</option>
+              {regions.map(region => (
+                <option key={region} value={region}>{region}</option>
+              ))}
+            </select>
+          </div>
+
+          <button type="submit">다음</button>
+        </form>
       </div>
     </div>
   );
