@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 import { signIn, confirmSignUp, getCurrentUser } from 'aws-amplify/auth';
 
 const Login = () => {
+    const { setUser } = useAuth();
     const [formData, setFormData] = useState({
         email: '',
         password: '',
@@ -18,7 +20,39 @@ const Login = () => {
             [e.target.name]: e.target.value
         });
     };
-    //수정된 부분 << 데이터 받아오는 부분이랑 error 처리 부분 다름
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        
+        try {
+            console.log('로그인 시도:', formData);
+            const response = await fetch('http://localhost:5002/api/auth/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData),
+            });
+
+            const data = await response.json();
+            console.log('서버 응답:', data);
+            
+            if (response.ok) {
+                localStorage.setItem('userId', data.userId);
+                setUser(data);
+                console.log('로그인 성공, userId:', data.userId);
+                alert('로그인 성공!');
+                navigate('/');
+            } else {
+                console.error('로그인 실패:', data.message);
+                alert(data.message || '로그인에 실패했습니다.');
+            }
+        } catch (error) {
+            console.error('로그인 에러 상세:', error);
+            alert('서버 연결에 실패했습니다. 서버가 실행 중인지 확인해주세요.');
+        }
+    };
+
     const handleVerification = async (e) => {
         e.preventDefault();
         try {
@@ -31,34 +65,6 @@ const Login = () => {
         } catch (error) {
             console.error('인증 에러:', error);
             setError('인증 코드가 올바르지 않습니다.');
-        }
-    };
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        
-        try {
-            const response = await fetch('http://localhost:5002/api/auth/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(formData),
-            });
-
-            const data = await response.json();
-            
-            if (response.ok) {
-                localStorage.setItem('userId', data.userId);
-                console.log('로그인 성공, userId:', data.userId);
-                alert('로그인 성공!');
-                navigate('/');
-            } else {
-                alert(data.message || '로그인에 실패했습니다.');
-            }
-        } catch (error) {
-            console.error('로그인 에러:', error);
-            alert('서버 연결에 실패했습니다.');
         }
     };
 
@@ -77,10 +83,7 @@ const Login = () => {
                                 id="verificationCode"
                                 name="verificationCode"
                                 value={formData.verificationCode}
-                                onChange={(e) => setFormData({
-                                    ...formData,
-                                    verificationCode: e.target.value
-                                })}
+                                onChange={handleChange}
                                 placeholder="이메일로 받은 인증 코드를 입력하세요"
                                 required
                             />
@@ -119,12 +122,7 @@ const Login = () => {
                     </form>
                 )}
                 <div className="login__links">
-                    <Link 
-                        to="/signin" 
-                        onClick={() => console.log('회원가입 링크 클릭됨')}
-                    >
-                        회원가입
-                    </Link>
+                    <Link to="/signin">회원가입</Link>
                     <Link to="/forgot-password">비밀번호 찾기</Link>
                 </div>
             </div>

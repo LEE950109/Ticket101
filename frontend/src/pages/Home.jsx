@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { AiFillStar, AiOutlineStar, AiOutlineLeft, AiOutlineRight } from "react-icons/ai";
 import { recommendedPerformances, ticketSites } from '../Data/home';
+import { useAuth } from '../context/AuthContext';
 
 const Home = () => {
+    const { user } = useAuth();
     const [favorites, setFavorites] = useState([]);
     const [currentSlide, setCurrentSlide] = useState({
         recommended: 0,
@@ -15,17 +17,19 @@ const Home = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        // localStorage에서 즐겨찾기 목록 가져오기
-        const storedFavorites = JSON.parse(localStorage.getItem('favorites') || '[]');
-        setFavorites(storedFavorites);
-    }, []);
+        if (user) {
+            const storedFavorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+            setFavorites(storedFavorites);
+        } else {
+            setFavorites([]);
+        }
+    }, [user]);
 
     const handleFavorite = (e, show) => {
         e.preventDefault();
         e.stopPropagation();
 
-        const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
-        if (!isLoggedIn) {
+        if (!user) {
             alert('로그인이 필요한 서비스입니다.');
             navigate('/login');
             return;
