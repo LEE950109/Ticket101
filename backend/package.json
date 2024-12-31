@@ -11,6 +11,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@aws-amplify/auth": "^6.9.0",
+    "aws-amplify": "^6.11.0",
     "bcrypt": "^5.1.1",
     "cors": "^2.8.5",
     "csv-parser": "^3.1.0",

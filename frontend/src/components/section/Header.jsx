@@ -1,49 +1,62 @@
 import React, { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { getCurrentUser, signOut } from 'aws-amplify/auth'
+import { useAuth } from '../../context/AuthContext'
 
 const Header = () => {
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const { user, setUser } = useAuth();
     const [searchQuery, setSearchQuery] = useState('');
     const navigate = useNavigate();
 
     useEffect(() => {
         const checkAuth = async () => {
             try {
-                const user = await getCurrentUser();
-                if (user) {
-                    setIsLoggedIn(true);
-                    localStorage.setItem('isLoggedIn', 'true');
+                // localStorage에서 userId 확인
+                const userId = localStorage.getItem('userId');
+                if (userId) {
+                    // 서버에서 사용자 정보 가져오기
+                    const response = await fetch(`http://localhost:5002/api/users/${userId}`);
+                    const userData = await response.json();
+                    if (response.ok) {
+                        setUser(userData);  // AuthContext에 사용자 정보 저장
+                    } else {
+                        setUser(null);
+                        localStorage.removeItem('userId');
+                    }
                 } else {
-                    setIsLoggedIn(false);
-                    localStorage.removeItem('isLoggedIn');
+                    setUser(null);
                 }
             } catch (error) {
-                setIsLoggedIn(false);
-                localStorage.removeItem('isLoggedIn');
+                console.error('인증 확인 에러:', error);
+                setUser(null);
+                localStorage.removeItem('userId');
             }
         };
 
         checkAuth();
 
-        const handleStorageChange = () => {
-            const isLoggedInStorage = localStorage.getItem('isLoggedIn') === 'true';
-            setIsLoggedIn(isLoggedInStorage);
+        // 다른 탭에서의 로그인/로그아웃 감지
+        const handleStorageChange = (e) => {
+            if (e.key === 'userId') {
+                if (!e.newValue) {
+                    setUser(null);
+                } else {
+                    checkAuth();
+                }
+            }
         };
 
         window.addEventListener('storage', handleStorageChange);
         return () => {
             window.removeEventListener('storage', handleStorageChange);
         };
-    }, []);
+    }, [setUser]);
 
     const onLogout = async () => {
         try {
-            await signOut();
-            localStorage.removeItem('isLoggedIn');
-            localStorage.removeItem('userData');
-            setIsLoggedIn(false);
-            window.dispatchEvent(new Event('storage'));
+            // 로그아웃 처리
+            localStorage.removeItem('userId');
+            localStorage.removeItem('favorites');  // 즐겨찾기 데이터 삭제
+            setUser(null);
             navigate('/');
         } catch (error) {
             console.error('로그아웃 에러:', error);
@@ -54,7 +67,7 @@ const Header = () => {
         e.preventDefault();
         if (searchQuery.trim()) {
             navigate(`/search?query=${encodeURIComponent(searchQuery)}`);
-            setSearchQuery(''); // 검색 후 입력창 초기화
+            setSearchQuery('');
         }
     };
 
@@ -92,7 +105,7 @@ const Header = () => {
                         </div>
                         <li><Link to='/Mypage'>마이페이지</Link></li>
                         <li>
-                            {isLoggedIn ? (
+                            {user ? (
                                 <Link to='/' onClick={onLogout}>로그아웃</Link>
                             ) : (
                                 <Link to='/Login'>로그인</Link>
