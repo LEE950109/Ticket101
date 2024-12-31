@@ -4,6 +4,7 @@ import { AiOutlineLeft, AiOutlineRight } from "react-icons/ai";
 import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import { getCurrentUser } from 'aws-amplify/auth';
+import { checkLoginStatus, getUserData } from '../Data/tempUserData';
 
 const Mypage = () => {
     const [userData, setUserData] = useState(null);
@@ -14,26 +15,38 @@ const Mypage = () => {
     useEffect(() => {
         const checkAuth = async () => {
             try {
-                const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
-                if (!isLoggedIn) {
+                // Cognito 인증 체크
+                const user = await getCurrentUser();
+                if (user) {
+                    const storedFavorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+                    setUserData({
+                        email: user.attributes?.email,
+                        nickname: user.attributes?.nickname || user.username,
+                        userId: user.userId || user.username,
+                        favorites: storedFavorites
+                    });
+                    setFavorites(storedFavorites);
+                } else {
+                    // 일반 로그인 체크
+                    if (!checkLoginStatus()) {
+                        navigate('/login');
+                        return;
+                    }
+                    const userInfo = getUserData();
+                    const storedFavorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+                    setUserData(userInfo);
+                    setFavorites(storedFavorites);
+                }
+            } catch (error) {
+                // Cognito 에러시 일반 로그인 체크
+                if (!checkLoginStatus()) {
                     navigate('/login');
                     return;
                 }
-
-                const user = await getCurrentUser();
+                const userInfo = getUserData();
                 const storedFavorites = JSON.parse(localStorage.getItem('favorites') || '[]');
-                
-                setUserData({
-                    ...user.attributes,
-                    userId: user.userId || user.username,
-                    favorites: storedFavorites
-                });
+                setUserData(userInfo);
                 setFavorites(storedFavorites);
-
-            } catch (error) {
-                console.error('인증 에러:', error);
-                localStorage.removeItem('isLoggedIn');
-                navigate('/login');
             }
         };
 
