@@ -47,20 +47,28 @@ export const PreferencesProvider = ({ children }) => {
 
       const finalUserId = localStorage.getItem('userId');
 
+      // 디버깅을 위한 로그 추가
+      console.log('preferences 전체:', preferences);
+      console.log('artists 데이터:', preferences.artists);
+      console.log('movies 데이터:', preferences.movies);
+
       // 아티스트 장르 번호 처리
       const artistGenreNumbers = preferences.artists
         .map(artist => artist.genre_number)
         .filter(Boolean)
         .join(',');
 
-      // 영화 장르 번호 처리 - 수정된 부분
+      // 영화 장르 번호 처리
       const movieGenreNumbers = preferences.movies
-        .map(movie => movie.genre_number)  // genre_number 속성 사용
+        .map(movie => {
+          console.log('개별 영화 데이터:', movie); // 각 영화 객체 확인
+          return movie.genre_number;
+        })
         .filter(Boolean)
         .join(',');
 
-      console.log('아티스트 장르:', artistGenreNumbers);
-      console.log('영화 장르:', movieGenreNumbers);
+      console.log('처리된 아티스트 장르:', artistGenreNumbers);
+      console.log('처리된 영화 장르:', movieGenreNumbers);
 
       const formattedData = {
         userId: parseInt(finalUserId),
@@ -69,7 +77,7 @@ export const PreferencesProvider = ({ children }) => {
         region: preferences.basic.region || null,
         user_genre: preferences.basic.user_genre || null,
         artist_genre_number: artistGenreNumbers || null,
-        movie_genre_number: movieGenreNumbers || null  // 수정된 부분
+        movie_genre_number: movieGenreNumbers || null
       };
 
       console.log('전송할 데이터:', formattedData);

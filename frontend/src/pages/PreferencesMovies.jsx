@@ -66,14 +66,16 @@ const PreferencesMovies = () => {
         throw new Error('최소 3개의 영화를 선택해주세요.');
       }
 
-      // 장르 번호만 추출 (genre_number 객체가 아닌 직접 숫자값 저장)
-      const moviePreferences = selectedMovies.map(movie => movie.genre_number);
+      // 선택된 영화의 장르 번호를 포함한 전체 데이터 전달
+      const movieData = selectedMovies.map(movie => ({
+        id: movie.id,
+        title: movie.title,
+        genre: movie.genre,
+        genre_number: movie.genre_number  // 장르 번호 포함
+      }));
 
-      // 선택된 영화 장르 번호 로깅
-      console.log('선택된 영화 장르:', moviePreferences);
-
-      // Context에 선택된 영화의 장르 번호 배열 저장
-      updateMoviePreferences(moviePreferences);
+      // Context에 영화 데이터 저장
+      updateMoviePreferences(movieData);
 
       // 모든 데이터 한 번에 저장
       await saveAllPreferences();
