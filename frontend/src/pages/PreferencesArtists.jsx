@@ -1,40 +1,63 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { usePreferences } from '../context/PreferencesContext';
 
 const PreferencesArtists = () => {
+  const navigate = useNavigate();
+  const { updateArtistPreferences } = usePreferences();
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [selectedArtists, setSelectedArtists] = useState([]);
   const [error, setError] = useState(null);
-  const navigate = useNavigate();
 
   const searchArtists = async (query) => {
     try {
+      // 검색어 유효성 검사
+      if (!query || query.length < 2) {
+        throw new Error('검색어는 2글자 이상 입력해주세요.');
+      }
+
       const response = await fetch(`http://localhost:5002/api/survey/artists/search?query=${query}`);
-      if (!response.ok) throw new Error('검색 실패');
-      return await response.json();
+      const data = await response.json();
+      
+      // 서버 응답 확인
+      if (!response.ok) {
+        throw new Error(data.error || '검색 실패');
+      }
+
+      // 데이터가 배열인지 확인
+      if (!Array.isArray(data)) {
+        console.error('잘못된 응답 형식:', data);
+        throw new Error('서버 응답 형식이 잘못되었습니다.');
+      }
+
+      // 데이터 매핑
+      return data.map(artist => ({
+        id: artist.id,
+        name: artist.artist_name,
+        genre: artist.genre,
+        genre_number: artist.genre_number
+      }));
     } catch (error) {
       console.error('아티스트 검색 오류:', error);
-      return [];
+      throw error; // 에러를 상위로 전파
     }
   };
 
   const handleSearch = async (e) => {
     const query = e.target.value;
-    if (query.length > 0) {
-      const results = await searchArtists(query);
-      setSearchResults(results);
-    } else {
-      setSearchResults([]);
-    }
-  };
-
-  const handleSearchChange = (e) => {
-    const query = e.target.value;
     setSearchQuery(query);
-    if (query.length >= 2) {
-      handleSearch(e);
-    } else {
+    
+    try {
+      if (query.length >= 2) {
+        const results = await searchArtists(query);
+        setSearchResults(results);
+        setError(null); // 검색 성공시 에러 초기화
+      } else {
+        setSearchResults([]);
+      }
+    } catch (error) {
+      setError(error.message);
       setSearchResults([]);
     }
   };
@@ -51,30 +74,27 @@ const PreferencesArtists = () => {
     setSelectedArtists(selectedArtists.filter(a => a.id !== artistId));
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async () => {
     try {
-      const userId = localStorage.getItem('userId');
-      if (!userId) throw new Error('사용자 ID를 찾을 수 없습니다.');
+      if (selectedArtists.length < 3) {
+        throw new Error('최소 3명의 아티스트를 선택해주세요.');
+      }
 
-      const response = await fetch('http://localhost:5002/api/survey/preferences/artists', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          userId: parseInt(userId),
-          preferences: selectedArtists.map(artist => ({ artistId: artist.id }))
-        })
-      });
+      // genre_number만 추출하여 저장
+      const artistPreferences = selectedArtists.map(artist => ({
+        genre_number: artist.genre_number
+      }));
 
-      if (!response.ok) throw new Error('선호도 저장에 실패했습니다.');
+      // Context에 선택된 아티스트의 장르 번호만 저장
+      updateArtistPreferences(artistPreferences);
+
+      // 다음 페이지로 이동
       navigate('/preferences/movies');
     } catch (error) {
-      console.error('선호도 저장 에러:', error);
+      console.error('아티스트 선호도 저장 에러:', error);
       setError(error.message);
     }
   };
-
-  const isSubmitDisabled = selectedArtists.length < 3;
 
   return (
     <div className="preferences-artists">
@@ -89,7 +109,7 @@ const PreferencesArtists = () => {
           placeholder="아티스트를 검색해주세요"
           className="search-input"
           value={searchQuery}
-          onChange={handleSearchChange}
+          onChange={handleSearch}
         />
 
         {searchResults.length > 0 && (
@@ -120,10 +140,12 @@ const PreferencesArtists = () => {
 
         <button
           onClick={handleSubmit}
-          disabled={isSubmitDisabled}
+          disabled={selectedArtists.length < 3}
           className="submit-button"
         >
-          {isSubmitDisabled ? `3명 이상의 아티스트를 선택해주세요 (${selectedArtists.length}/3)` : '다음'}
+          {selectedArtists.length < 3 
+            ? `3명 이상의 아티스트를 선택해주세요 (${selectedArtists.length}/3)` 
+            : '다음'}
         </button>
       </div>
     </div>

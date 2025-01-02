@@ -1,40 +1,95 @@
+const mysql = require('mysql2/promise');
+const csv = require('fast-csv');
 const fs = require('fs');
-const csv = require('csv-parser');
-const mysql = require('mysql2');
+const path = require('path');
 
-const db = mysql.createConnection({
-    host: '192.168.0.11',
-    user: 'myuser',
-    password: 'welcome1!',
-    database: 'ticket_system'
-});
+const dbConfig = {
+  host: '192.168.0.11',
+  port: 3306,
+  user: 'myuser',
+  password: 'welcome1!',
+  database: 'ticket_system',
+  maxAllowedPacket: 1073741824 // 1GB로 설정
+};
 
-const results = [];
+async function importMovies() {
+  const connection = await mysql.createConnection(dbConfig);
+  const movies = [];
+  let currentId = 1;
 
-// CSV 파일의 경로를 frontend 폴더 기준으로 수정
-fs.createReadStream('./src/Data/movies.csv')  // Data 폴더에 movies.csv 파일이 있다고 가정
-  .pipe(csv({
-    headers: ['id', 'title', 'genre', 'production_country', 'release_year', 'director', 'plot'],
-    skipLines: 1
-  }))
-  .on('data', (data) => results.push(data))
-  .on('end', () => {
-    results.forEach(movie => {
-      const sql = 'INSERT INTO movies (id, title, name, production_country, release_year, director, plot) VALUES (?, ?, ?, ?, ?, ?, ?)';
-      db.query(sql, [
+  try {
+    const csvPath = path.join(__dirname, '..', 'Data', 'movies.csv');
+    
+    // 스트림 옵션 추가
+    const streamOptions = { 
+      highWaterMark: 1024 * 1024, // 1MB 버퍼
+    };
+
+    await new Promise((resolve, reject) => {
+      fs.createReadStream(csvPath, streamOptions)
+        .pipe(csv.parse({ 
+          headers: true,
+          maxRows: 0 // 행 제한 제거
+        }))
+        .on('data', (row) => {
+          if (row.title && row.genre && row.genre_number) {
+            movies.push({
+              id: currentId++,
+              title: row.title || '',
+              genre: row.genre || '',
+              genre_number: row.genre_number || 0,
+              production_country: row.production_country || '',
+              release_year: row.release_year || null,
+              director: row.director || '',
+              plot: row.plot || ''
+            });
+          } else {
+            console.log('데이터 누락:', row);
+          }
+        })
+        .on('error', (error) => {
+          console.error('CSV 파일 읽기 오류:', error);
+          reject(error);
+        })
+        .on('end', () => {
+          console.log('CSV 파일 읽기 완료. 총 레코드 수:', movies.length);
+          resolve();
+        });
+    });
+
+    // 기존 데이터 삭제
+    await connection.execute('TRUNCATE TABLE movies');
+
+    // 배치 처리
+    const batchSize = 1000;
+    for (let i = 0; i < movies.length; i += batchSize) {
+      const batch = movies.slice(i, i + batchSize);
+      const values = batch.map(movie => [
         movie.id,
         movie.title,
-        movie.name,
+        movie.genre,
+        movie.genre_number,
         movie.production_country,
-        movie.release_year || null,
+        movie.release_year,
         movie.director,
         movie.plot
-      ], (err, result) => {
-        if (err) {
-          console.error('Error inserting movie:', err);
-        } else {
-          console.log('Inserted movie:', movie.title);
-        }
-      });
-    });
-  }); 
+      ]);
+      
+      await connection.query(
+        'INSERT INTO movies (id, title, genre, genre_number, production_country, release_year, director, plot) VALUES ?',
+        [values]
+      );
+      
+      console.log(`${i + batch.length}/${movies.length} 레코드 처리 완료`);
+    }
+
+    console.log(`${movies.length}개의 영화 데이터가 성공적으로 추가되었습니다.`);
+  } catch (error) {
+    console.error('데이터 import 중 오류 발생:', error);
+    console.error('오류 상세:', error.message);
+  } finally {
+    await connection.end();
+  }
+}
+
+importMovies(); 

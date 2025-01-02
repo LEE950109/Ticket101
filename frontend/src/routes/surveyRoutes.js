@@ -10,100 +10,110 @@ const pool = mysql.createPool({
   database: 'ticket_system'
 });
 
-// 1. 기본 정보 저장 (성별, 나이, 지역)
+// 기본 선호도 저장 라우트
 router.post('/preferences/basic', async (req, res) => {
   try {
-    const { userId, gender, age, region } = req.body;
+    const { userId, gender, age, region, user_genre } = req.body;
     const connection = await pool.getConnection();
     
-    await connection.execute(
-      'INSERT INTO user_preferences (user_id, gender, age, region) VALUES (?, ?, ?, ?)',
-      [userId, gender, age, region]
-    );
-    
-    connection.release();
-    res.json({ success: true });
+    try {
+      await connection.execute(
+        `INSERT INTO user_preferences 
+         (user_id, gender, age, region, user_genre) 
+         VALUES (?, ?, ?, ?, ?)
+         ON DUPLICATE KEY UPDATE
+         gender = ?, age = ?, region = ?, user_genre = ?`,
+        [userId, gender, age, region, user_genre, 
+         gender, age, region, user_genre]
+      );
+      
+      res.json({ success: true });
+    } finally {
+      connection.release();
+    }
   } catch (error) {
-    console.error(error);
+    console.error('기본 선호도 저장 에러:', error);
     res.status(500).json({ error: '기본 정보 저장 실패' });
   }
 });
 
-// 2. 장르 선호도 저장
-router.post('/preferences/genre', async (req, res) => {
-  try {
-    const { userId, genres } = req.body;
-    const connection = await pool.getConnection();
-    
-    // 기존 선호도 삭제
-    await connection.execute(
-      'DELETE FROM user_genre_preferences WHERE user_id = ?',
-      [userId]
-    );
-    
-    // 새로운 선호도 추가
-    for (const genre of genres) {
-      await connection.execute(
-        'INSERT INTO user_genre_preferences (user_id, genre_type) VALUES (?, ?)',
-        [userId, genre]
-      );
-    }
-    
-    connection.release();
-    res.json({ success: true });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: '장르 선호도 저장 실패' });
-  }
-});
-
-// 3. 아티스트 검색
-router.get('/artists/search', async (req, res) => {
-  try {
-    const { query } = req.query;
-    console.log('검색 쿼리:', query);
-
-    const connection = await pool.getConnection();
-    const [rows] = await connection.execute(
-      'SELECT * FROM artists WHERE name LIKE ? LIMIT 10',
-      [`%${query}%`]
-    );
-    
-    console.log('검색 결과:', rows);
-    connection.release();
-    res.json(rows);
-  } catch (error) {
-    console.error('아티스트 검색 오류:', error);
-    res.status(500).json({ error: '아티스트 검색 실패' });
-  }
-});
-
-// 4. 아티스트 선호도 저장
+// 아티스트 선호도 저장 라우트
 router.post('/preferences/artists', async (req, res) => {
   try {
     const { userId, artistIds } = req.body;
     const connection = await pool.getConnection();
     
-    // 기존 선호도 삭제
-    await connection.execute(
-      'DELETE FROM user_artist_preferences WHERE user_id = ?',
-      [userId]
-    );
-    
-    // 새로운 선호도 추가
-    for (const artistId of artistIds) {
-      await connection.execute(
-        'INSERT INTO user_artist_preferences (user_id, artist_id) VALUES (?, ?)',
-        [userId, artistId]
+    try {
+      // 선택된 아티스트의 장르 번호 가져오기
+      const [artists] = await connection.query(
+        'SELECT genre_number FROM artists WHERE id IN (?)',
+        [artistIds]
       );
+      
+      // 가장 많이 선택된 장르 번호 찾기
+      const artist_genre_number = findMostCommonGenre(artists);
+      
+      // user_preferences 업데이트
+      await connection.execute(
+        `UPDATE user_preferences 
+         SET artist_genre_number = ?
+         WHERE user_id = ?`,
+        [artist_genre_number, userId]
+      );
+      
+      res.json({ success: true });
+    } finally {
+      connection.release();
     }
-    
-    connection.release();
-    res.json({ success: true });
   } catch (error) {
-    console.error(error);
+    console.error('아티스트 선호도 저장 에러:', error);
     res.status(500).json({ error: '아티스트 선호도 저장 실패' });
   }
 });
+
+// 영화 선호도 저장 라우트
+router.post('/preferences/movies', async (req, res) => {
+  try {
+    const { userId, movieIds } = req.body;
+    const connection = await pool.getConnection();
+    
+    try {
+      // 선택된 영화의 장르 번호 가져오기
+      const [movies] = await connection.query(
+        'SELECT genre_number FROM movies WHERE id IN (?)',
+        [movieIds]
+      );
+      
+      // 가장 많이 선택된 장르 번호 찾기
+      const movie_genre_number = findMostCommonGenre(movies);
+      
+      // user_preferences 업데이트
+      await connection.execute(
+        `UPDATE user_preferences 
+         SET movie_genre_number = ?
+         WHERE user_id = ?`,
+        [movie_genre_number, userId]
+      );
+      
+      res.json({ success: true });
+    } finally {
+      connection.release();
+    }
+  } catch (error) {
+    console.error('영화 선호도 저장 에러:', error);
+    res.status(500).json({ error: '영화 선호도 저장 실패' });
+  }
+});
+
+// 가장 많이 선택된 장르 번호 찾기 함수
+function findMostCommonGenre(items) {
+  const genreCounts = {};
+  items.forEach(item => {
+    genreCounts[item.genre_number] = (genreCounts[item.genre_number] || 0) + 1;
+  });
+  
+  return Object.entries(genreCounts)
+    .sort(([,a], [,b]) => b - a)[0][0];
+}
 
 module.exports = router; 

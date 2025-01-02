@@ -1,47 +1,41 @@
 const express = require('express');
 const cors = require('cors');
-const surveyRoutes = require('./routes/surveyRoutes');
-
 const app = express();
 
-// CORS 설정
+// CORS 설정 단순화
 app.use(cors());
 
-// JSON 파싱 미들웨어
+// body-parser 설정
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-// 라우트 연결 전에 요청 로깅
+// 요청 로깅 미들웨어
 app.use((req, res, next) => {
-  console.log(`${req.method} ${req.url}`);
+  console.log('Request:', {
+    method: req.method,
+    path: req.path,
+    body: req.body,
+    headers: req.headers
+  });
   next();
 });
 
-// API 라우트 설정
-app.use('/api/survey', surveyRoutes);
+// 라우트 설정
+app.use('/api/survey', require('./routes/surveyRoutes'));
+app.use('/api/performances', require('./routes/performanceRoutes'));
 
-// 404 에러 핸들러
-app.use((req, res, next) => {
-  console.log('404 에러:', req.method, req.url);
-  res.status(404).json({ 
-    message: '요청하신 경로를 찾을 수 없습니다.',
-    path: req.url,
-    method: req.method
-  });
-});
-
-// 에러 핸들러
+// 에러 핸들링
 app.use((err, req, res, next) => {
-  console.error('서버 에러:', err);
-  res.status(500).json({ 
-    message: '서버 에러가 발생했습니다.',
-    error: err.message
+  console.error('Server Error:', err);
+  res.status(500).json({
+    error: '서버 에러',
+    message: err.message
   });
 });
 
 const PORT = process.env.PORT || 5002;
 app.listen(PORT, () => {
-  console.log(`서버가 ${PORT} 포트에서 실행 중입니다.`);
-  console.log('등록된 라우트:', app._router.stack.filter(r => r.route).map(r => `${Object.keys(r.route.methods)} ${r.route.path}`));
+  console.log(`Server is running on port ${PORT}`);
 });
 
 module.exports = app; 

@@ -1,15 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getCurrentUser } from 'aws-amplify/auth';
+import { usePreferences } from '../context/PreferencesContext';
 
 const PreferencesBasic = () => {
   const navigate = useNavigate();
+  const { updateBasicPreferences } = usePreferences();
   const [formData, setFormData] = useState({
     gender: '',
     age: '',
     region: '',
-    genre: ''
+    user_genre: ''
   });
+  const [error, setError] = useState('');
 
   useEffect(() => {
     checkAuthStatus();
@@ -47,56 +50,30 @@ const PreferencesBasic = () => {
     "국악"
   ];
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     
-    try {
-      const userId = localStorage.getItem('userId');
-      
-      if (!userId) {
-        throw new Error('사용자 정보를 찾을 수 없습니다. 다시 로그인해주세요.');
-      }
-
-      console.log('저장할 데이터:', {
-        userId,
-        preferences: {
-          gender: formData.gender,
-          age: formData.age,
-          region: formData.region,
-          genre: formData.genre
-        }
-      });
-
-      const response = await fetch('http://localhost:5002/api/survey/preferences/basic', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          userId: parseInt(userId),
-          preferences: {
-            gender: formData.gender,
-            age: parseInt(formData.age),
-            region: formData.region,
-            genre: formData.genre
-          }
-        }),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || '선호도 저장에 실패했습니다.');
-      }
-
-      navigate('/preferences/artists');
-    } catch (error) {
-      console.error('선호도 저장 에러 상세:', error);
-      if (error.message.includes('사용자 정보를 찾을 수 없습니다')) {
-        navigate('/login');
-      } else {
-        alert(error.message);
-      }
+    // 데이터 검증
+    if (!formData.gender || !formData.age || !formData.region || !formData.user_genre) {
+      setError('모든 항목을 입력해주세요.');
+      return;
     }
+
+    console.log('기본 정보 저장:', formData); // 로깅 추가
+    updateBasicPreferences(formData);
+    navigate('/preferences/artists');
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => {
+      const newData = {
+        ...prev,
+        [name]: value
+      };
+      console.log('업데이트된 formData:', newData);
+      return newData;
+    });
   };
 
   return (
@@ -150,8 +127,8 @@ const PreferencesBasic = () => {
           <div className="form-group">
             <label>선호 장르</label>
             <select
-              value={formData.genre}
-              onChange={(e) => setFormData({...formData, genre: e.target.value})}
+              value={formData.user_genre}
+              onChange={(e) => setFormData({...formData, user_genre: e.target.value})}
               required
             >
               <option value="">선택해주세요</option>

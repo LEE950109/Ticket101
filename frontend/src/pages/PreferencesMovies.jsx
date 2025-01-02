@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { usePreferences } from '../context/PreferencesContext';
 
 const PreferencesMovies = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -7,12 +8,19 @@ const PreferencesMovies = () => {
   const [selectedMovies, setSelectedMovies] = useState([]);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+  const { updateMoviePreferences, saveAllPreferences } = usePreferences();
 
   const searchMovies = async (query) => {
     try {
       const response = await fetch(`http://localhost:5002/api/survey/movies/search?query=${query}`);
       if (!response.ok) throw new Error('검색 실패');
-      return await response.json();
+      const data = await response.json();
+      return data.map(movie => ({
+        id: movie.id,
+        title: movie.title,
+        genre: movie.genre,
+        genre_number: movie.genre_number
+      }));
     } catch (error) {
       console.error('영화 검색 오류:', error);
       return [];
@@ -54,24 +62,25 @@ const PreferencesMovies = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const userId = localStorage.getItem('userId');
-      if (!userId) throw new Error('사용자 ID를 찾을 수 없습니다.');
+      if (selectedMovies.length < 3) {
+        throw new Error('최소 3개의 영화를 선택해주세요.');
+      }
 
-      const response = await fetch('http://localhost:5002/api/survey/preferences/movies', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          userId: parseInt(userId),
-          preferences: selectedMovies.map(movie => ({
-            movieId: movie.id,
-            genre: movie.genre || null
-          }))
-        })
-      });
+      // 장르 번호만 추출 (genre_number 객체가 아닌 직접 숫자값 저장)
+      const moviePreferences = selectedMovies.map(movie => movie.genre_number);
 
-      if (!response.ok) throw new Error('선호도 저장에 실패했습니다.');
-      alert('선호도 조사가 완료되었습니다.');
-      navigate('/');
+      // 선택된 영화 장르 번호 로깅
+      console.log('선택된 영화 장르:', moviePreferences);
+
+      // Context에 선택된 영화의 장르 번호 배열 저장
+      updateMoviePreferences(moviePreferences);
+
+      // 모든 데이터 한 번에 저장
+      await saveAllPreferences();
+
+      // 로그인 페이지로 이동
+      navigate('/login');
+      
     } catch (error) {
       console.error('선호도 저장 에러:', error);
       setError(error.message);
