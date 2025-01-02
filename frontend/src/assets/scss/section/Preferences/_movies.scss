@@ -1,4 +1,4 @@
-.preferences {
+.preferences-movies {
     padding-top: 150px;
     min-height: 100vh;
     background-color: var(--black100);
@@ -91,17 +91,21 @@
         }
 
         &__item {
-            background-color: var(--ticket300);
+            background-color: var(--black400);
             color: var(--white100);
-            padding: 6px 10px;
-            border-radius: 2px;
+            padding: 6px 25px 6px 10px;
+            border-radius: 4px;
             display: flex;
             align-items: center;
-            justify-content: space-between;
             font-size: 13px;
-            gap: 8px;
+            position: relative;
+            width: fit-content;
 
             button {
+                position: absolute;
+                right: 8px;
+                top: 50%;
+                transform: translateY(-50%);
                 background: none;
                 border: none;
                 color: var(--white100);
@@ -132,11 +136,10 @@
 
         &:hover {
             background-color: var(--ticket200);
-            color: var(--white100);
         }
 
         &:disabled {
-            background-color: var(--white300);
+            background-color: var(--white400);
             cursor: not-allowed;
         }
     }

@@ -74,11 +74,11 @@ const PreferencesArtists = () => {
     }
   };
 
-  const isSubmitDisabled = selectedArtists.length < 5;
+  const isSubmitDisabled = selectedArtists.length < 3;
 
   return (
-    <div className="preferences">
-      <div className="preferences__inner">
+    <div className="preferences-artists">
+      <div className="preferences-artists__inner">
         <h1>맞춤 공연 설문 조사</h1>
         <h2>선호하는 가수를 검색 해주세요</h2>
         
@@ -107,7 +107,7 @@ const PreferencesArtists = () => {
         )}
 
         <div className="selected-items">
-          <h3>선택된 아티스트 ({selectedArtists.length}/5)</h3>
+          <h3>선택된 아티스트 ({selectedArtists.length}/3)</h3>
           <div className="selected-items__list">
             {selectedArtists.map(artist => (
               <div key={artist.id} className="selected-items__item">
@@ -123,7 +123,7 @@ const PreferencesArtists = () => {
           disabled={isSubmitDisabled}
           className="submit-button"
         >
-          {isSubmitDisabled ? `최소 5명의 아티스트를 선택해주세요 (${selectedArtists.length}/5)` : '다음'}
+          {isSubmitDisabled ? `3명 이상의 아티스트를 선택해주세요 (${selectedArtists.length}/3)` : '다음'}
         </button>
       </div>
     </div>

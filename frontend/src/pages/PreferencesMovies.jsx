@@ -78,11 +78,11 @@ const PreferencesMovies = () => {
     }
   };
 
-  const isSubmitDisabled = selectedMovies.length < 5;
+  const isSubmitDisabled = selectedMovies.length < 3;
 
   return (
-    <div className="preferences">
-      <div className="preferences__inner">
+    <div className="preferences-movies">
+      <div className="preferences-movies__inner">
         <h1>맞춤 공연 설문 조사</h1>
         <h2>좋아하는 영화를 검색 해주세요</h2>
         
@@ -111,7 +111,7 @@ const PreferencesMovies = () => {
         )}
 
         <div className="selected-items">
-          <h3>선택된 영화 ({selectedMovies.length}/5)</h3>
+          <h3>선택된 영화 ({selectedMovies.length}/3)</h3>
           <div className="selected-items__list">
             {selectedMovies.map(movie => (
               <div key={movie.id} className="selected-items__item">
@@ -127,7 +127,7 @@ const PreferencesMovies = () => {
           disabled={isSubmitDisabled}
           className="submit-button"
         >
-          {isSubmitDisabled ? `최소 5개의 영화를 선택해주세요 (${selectedMovies.length}/5)` : '완료'}
+          {isSubmitDisabled ? `3개 이상 영화를 선택해주세요 (${selectedMovies.length}/3)` : '완료'}
         </button>
       </div>
     </div>

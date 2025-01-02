@@ -1,4 +1,4 @@
-.preferences {
+.preferences-basic {
     padding-top: 150px;
     min-height: 100vh;
     background-color: var(--black100);
@@ -91,7 +91,7 @@
         }
 
         &:disabled {
-            background-color: var(--white300);
+            background-color: var(--white400);
             cursor: not-allowed;
         }
     }

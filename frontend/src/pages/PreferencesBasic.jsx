@@ -7,7 +7,8 @@ const PreferencesBasic = () => {
   const [formData, setFormData] = useState({
     gender: '',
     age: '',
-    region: ''
+    region: '',
+    genre: ''
   });
 
   useEffect(() => {
@@ -39,6 +40,13 @@ const PreferencesBasic = () => {
     "전북", "전남", "광주", "경북", "경남", "대구", "울산", "부산", "제주"
   ];
 
+  const genres = [
+    "뮤지컬",
+    "콘서트",
+    "클래식",
+    "국악"
+  ];
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     
@@ -54,7 +62,8 @@ const PreferencesBasic = () => {
         preferences: {
           gender: formData.gender,
           age: formData.age,
-          region: formData.region
+          region: formData.region,
+          genre: formData.genre
         }
       });
 
@@ -68,7 +77,8 @@ const PreferencesBasic = () => {
           preferences: {
             gender: formData.gender,
             age: parseInt(formData.age),
-            region: formData.region
+            region: formData.region,
+            genre: formData.genre
           }
         }),
       });
@@ -90,8 +100,8 @@ const PreferencesBasic = () => {
   };
 
   return (
-    <div className="preferences">
-      <div className="preferences__inner">
+    <div className="preferences-basic">
+      <div className="preferences-basic__inner">
         <h1>맞춤 공연 설문 조사</h1>
         <h2>더 정확한 공연 추천을 위해<br/>
         간단한 정보를 입력해주세요</h2>
@@ -133,6 +143,20 @@ const PreferencesBasic = () => {
               <option value="">선택해주세요</option>
               {regions.map(region => (
                 <option key={region} value={region}>{region}</option>
+              ))}
+            </select>
+          </div>
+
+          <div className="form-group">
+            <label>선호 장르</label>
+            <select
+              value={formData.genre}
+              onChange={(e) => setFormData({...formData, genre: e.target.value})}
+              required
+            >
+              <option value="">선택해주세요</option>
+              {genres.map(genre => (
+                <option key={genre} value={genre}>{genre}</option>
               ))}
             </select>
           </div>
