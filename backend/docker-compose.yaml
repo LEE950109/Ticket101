@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  auth:
+    build: 
+      context: .
+      dockerfile: auth/Dockerfile
+    volumes:
+      - ./shared:/usr/src/app/shared
+    env_file:
+      - .env
+    environment:
+      - NODE_ENV=production
+    ports:
+      - "${AUTH_PORT}:${AUTH_PORT}"
+    depends_on:
+      - db
+
+  survey:
+    build:
+      context: .
+      dockerfile: survey/Dockerfile
+    volumes:
+      - ./shared:/usr/src/app/shared
+    env_file:
+      - .env
+    environment:
+      - NODE_ENV=production
+    ports:
+      - "${SURVEY_PORT}:${SURVEY_PORT}"
+    depends_on:
+      - db
+
+  db:
+    image: mysql:8.0
+    env_file:
+      - .env
+    environment:
+      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
+      - MYSQL_DATABASE=${DB_NAME}
+      - MYSQL_USER=${DB_USER}
+      - MYSQL_PASSWORD=${DB_PASSWORD}
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+volumes:
+  mysql_data:
