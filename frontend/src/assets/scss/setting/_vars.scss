@@ -1,0 +1,49 @@
+:root {
+    --mainfont-nanum: "Kimjungchul";
+    --mainfont-nanum: "GmarketSans";
+  
+    --black: #000;
+    --black100: #101010;
+    --black200: #202020;
+    --black300: #303030;
+    --black400: #404040;
+    --black500: #505050;
+    
+    --white: #fff;
+    --white100: #ebebeb;
+    --white200: #dcdcdc;
+    --white300: #bcbcbc;
+    --white400: #9c9c9c;
+    --white500: #7c7c7c;
+    
+    --ticket: #39ffc7;
+    --ticket100: #36eab7;
+    --ticket200: #2ecfa1;
+    --ticket300: #26ac86;
+    --ticket400: #1b785e;
+    --ticket500: #12513f;
+
+    --star: #ffd700;
+    --star100: #e1c003;
+
+    //캘린더
+    --calendar-sun: #fe7f7f;
+    --calendar-sat: #7878ff;
+    // 폰트 셋팅
+    font-family: var(--mainfont-Kimjungchul),var(--mainfont-GmarketSans);
+    font-size: 16px;
+    line-height: 1.5;
+    font-weight: 400;
+    
+    // 폰트 최적화
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-text-size-adjust: 100%;
+  
+    @media (max-width: 800px) {
+        font-size: 14px;
+        line-height: 1.4;
+    }
+}

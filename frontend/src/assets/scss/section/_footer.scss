@@ -1,0 +1,23 @@
+#footer {
+    position: relative;
+    background-color: var(--black100);
+    color: var(--white100);
+    width: 100%;
+    padding-top: 50px;
+    text-align: center;
+    font-size: 12px;
+
+    .footer__inner {
+        max-width: 1600px;
+        margin: 0 auto;
+
+        .footer__text {
+            color: var(--white200);
+            line-height: 1.5;
+            
+            p {
+                margin: 2px 0;
+            }
+        }
+    }
+}
