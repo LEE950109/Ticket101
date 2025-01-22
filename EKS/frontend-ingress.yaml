@@ -1,0 +1,21 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: frontend-ingress
+  annotations:
+    kubernetes.io/ingress.class: alb                           # ALB를 지정
+    alb.ingress.kubernetes.io/scheme: internet-facing          # 외부 접근 가능
+    alb.ingress.kubernetes.io/target-type: ip                # Pod의 IP를 직접 대상으로 사용
+spec:
+  ingressClassName: alb
+  rules:
+    - host: ticket101.kr               
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: frontend-service
+                port:
+                  number: 80

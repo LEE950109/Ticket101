@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend-service # 서비스 이름
+  labels:
+    app: frontend # 서비스와 관련된 레이블 (Deployment와 일치해야 함)
+spec:
+  ports:
+    - name: "http"
+      protocol: TCP
+      port: 80         # 외부에서 접근하는 포트
+      targetPort: 80   # 컨테이너에서 노출하는 포트
+  selector:
+    app: frontend      # Deployment의 selector와 일치해야 함
+  type: ClusterIP   # AWS ELB를 통해 외부 트래픽을 노출

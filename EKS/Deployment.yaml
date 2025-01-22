@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: eks-deploy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      nodeSelector:
+          role: frontend
+      containers:
+        - name: frontend
+          image: AWS_ECR_URI # CodeBuild에서 실제 이미지 URL로 치환
+          ports:
+            - containerPort: 80
+          imagePullPolicy: Always # 항상 최신 이미지를 가져옴
+          env:
+            - name: DATE
+              value: DATE_STRING # CodeBuild에서 현재 날짜로 치환
+            - name: REACT_APP_AWS_PROJECT_REGION
+              valueFrom:
+                secretKeyRef:
+                  name: app-secrets
+                  key: REACT_APP_AWS_PROJECT_REGION
+            - name: REACT_APP_AWS_COGNITO_IDENTITY_POOL_ID
+              valueFrom:
+                secretKeyRef:
+                  name: app-secrets
+                  key: REACT_APP_AWS_COGNITO_IDENTITY_POOL_ID
+            - name: REACT_APP_AWS_USER_POOLS_ID
+              valueFrom:
+                secretKeyRef:
+                  name: app-secrets
+                  key: REACT_APP_AWS_USER_POOLS_ID
+            - name: REACT_APP_AWS_USER_POOLS_WEB_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: app-secrets
+                  key: REACT_APP_AWS_USER_POOLS_WEB_CLIENT_ID
+            - name: BACKEND_URL
+              value: "http://internal-k8s-default-backendi-87ea846096-58372950.ap-northeast-2.elb.amazonaws.com"
+              valueFrom:
+                secretKeyRef:
+                  name: app-secrets
+                  key: BACKEND_URL              

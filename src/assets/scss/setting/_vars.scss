@@ -1,0 +1,65 @@
+:root {
+    // 폰트 변수 설정
+    --font-main: "NoonnuBasicGothicRegular";
+    --font-point: "PuradakGentleGothicR";
+
+    --black: #000;
+    --black100: #101010;
+    --black200: #202020;
+    --black300: #303030;
+    --black400: #404040;
+    --black500: #505050;
+
+    --white: #fff;
+    --white100: #ebebeb;
+    --white200: #dcdcdc;
+    --white300: #bcbcbc;
+    --white400: #9c9c9c;
+    --white500: #7c7c7c;
+
+    --ticket: #39ffc7;
+    --ticket100: #36eab7;
+    --ticket200: #2ecfa1;
+    --ticket300: #26ac86;
+    --ticket400: #1b785e;
+    --ticket500: #12513f;
+
+    --star: #ffd700;
+    --star100: #e1c003;
+
+    //캘린더
+    --calendar-sun: #fe7f7f;
+    --calendar-sat: #7878ff;
+
+    // 캘린더 이벤트 색상
+    --calendar-event5: #F34971;
+    --calendar-event3: #F96300;
+    --calendar-event7: #FF9382;
+    --calendar-event2: #F5c900;
+    --calendar-event10: #AABB5D;
+    --calendar-event8: #39C0C8;
+    --calendar-event4: #6C47FF;
+    --calendar-event6: #A1c1DC;
+    --calendar-event1: #34A853;
+    --calendar-event9: #F39C12;
+
+    // 폰트 셋팅
+    font-family: var(--font-main);
+    font-size: 16px;
+    line-height: 1.5;
+    font-weight: 400;
+    
+    // 폰트 최적화
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-text-size-adjust: 100%;
+  
+    @media (max-width: 800px) {
+        font-size: 14px;
+        line-height: 1.4;
+    }
+}
+
+

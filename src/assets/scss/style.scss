@@ -1,0 +1,25 @@
+@charset "UTF-8";
+
+// setting
+@import './setting/fonts';
+@import './setting/vars';
+@import './setting/reset';
+@import './setting/common';
+
+// section
+@import './section/layout';
+@import './section/header';
+@import './section/main';
+@import './section/footer';
+@import './section/home';
+@import './section/login';
+@import './section/detail';
+@import './section/mypage';
+@import './section/signin';
+@import './section/search';
+
+
+@import './section/Preferences/basic';
+@import './section/Preferences/artists';
+@import './section/Preferences/movies';
+

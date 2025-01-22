@@ -1,0 +1,176 @@
+#main {
+    .section__title {
+        font-size: 30px;
+        font-weight: 300;
+        color: var(--white100);
+        margin: 40px 40px 5px;
+        font-family: var(--font-point);
+    }
+
+    .show__list-container {
+        position: relative;
+        overflow: hidden;
+        padding: 0 40px;
+        margin: 20px 0;
+    }
+
+    .show__list {
+        display: flex;
+        flex-wrap: nowrap;
+        gap: 14px;
+        transition: transform 0.3s ease;
+
+        .show__item {
+            flex: 0 0 calc((100% - (16px * 5)) / 6);
+            min-width: 180px;
+            width: 180px;
+            display: block !important;
+
+            .show__image-container {
+                position: relative;
+                width: 220px;
+                height: 310px;
+
+                img {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                }
+
+                .favorite-btn {
+                    position: absolute;
+                    top: 5px;
+                    right: 5px;
+                    background: transparent;
+                    border: none;
+                    cursor: pointer;
+                    z-index: 2;
+
+                    .star-icon {
+                        font-size: 24px;
+                        color: var(--white);
+                        filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.5));
+
+                        &.active {
+                            color: var(--star);
+                        }
+                    }
+                }
+            }
+
+            p {
+                color: var(--white100);
+                margin-top: 10px;
+                text-align: center;
+                font-size: 14px;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+        }
+    }
+
+    .slide-btn {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        background: transparent;
+        color: var(--white100);
+        border: none;
+        cursor: pointer;
+        z-index: 10;
+        width: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+
+        svg {
+            font-size: 24px;
+            filter: drop-shadow(0 0 2px var(--black100));
+        }
+
+        &:hover {
+            background: var(--black200);
+        }
+
+        &.prev {
+            left: 0;
+            background: linear-gradient(to right, var(--black200), transparent);
+        }
+        &.next {
+            right: 0;
+            background: linear-gradient(to left, var(--black200), transparent);
+        }
+
+        &:disabled {
+            opacity: 0;
+            cursor: not-allowed;
+        }
+    }
+
+    @media screen and (max-width: 768px) {
+        .show__list {
+            gap: 10px;
+            padding: 0 10px;
+        }
+
+        .show__item {
+            flex: 0 0 180px !important;
+            min-width: 180px !important;
+            width: 180px !important;
+
+            .show__image-container {
+                width: 180px !important;
+                height: 260px !important;
+            }
+        }
+
+        .slide-btn {
+            width: 40px;
+
+            svg {
+                font-size: 20px;
+            }
+        }
+    }
+
+    section:first-child .show__list {
+        .show__item {
+            perspective: 1000px;
+
+            .show__image-container {
+                position: relative;
+                width: 220px;
+                height: 310px;
+                transform-style: preserve-3d;
+                opacity: 0;
+                animation: recommendedFlip 0.8s ease-out forwards;
+
+                img {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                    backface-visibility: hidden;
+                }
+            }
+        }
+
+        @for $i from 1 through 6 {
+            .show__item:nth-child(#{$i}) .show__image-container {
+                animation-delay: #{$i * 0.15}s;
+            }
+        }
+    }
+
+    @keyframes recommendedFlip {
+        0% {
+            opacity: 0;
+            transform: rotateY(180deg);
+        }
+        100% {
+            opacity: 1;
+            transform: rotateY(0deg);
+        }
+    }
+}

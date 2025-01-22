@@ -1,0 +1,124 @@
+.preferences-basic {
+    padding-top: 150px;
+    min-height: 100vh;
+    background-color: var(--black100);
+
+    &__inner {
+        max-width: 400px;
+        margin: 0 auto;
+        padding: 40px;
+        background-color: var(--black200);
+        border-radius: 8px;
+
+        h1 {
+            color: var(--ticket200);
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        h2 {
+            color: var(--white200);
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 16px;
+        }
+    }
+
+    .form-group {
+        margin-bottom: 1rem;
+
+        label {
+            display: block;
+            color: var(--white300);
+            margin-bottom: 8px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        select, input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--black300);
+            border-radius: 4px;
+            background-color: var(--black200);
+            color: var(--white300);
+            transition: all 0.3s ease;
+            
+            &:focus {
+                outline: none;
+                border-color: var(--black300);
+                background-color: var(--white200);
+                color: var(--black);
+            }
+
+            &::placeholder {
+                color: var(--white200);
+            }
+
+            option {
+                background-color: var(--black200);
+                color: var(--white200);
+                padding: 8px;
+            }
+        }
+
+        input[type="number"] {
+            &::-webkit-inner-spin-button,
+            &::-webkit-outer-spin-button {
+                -webkit-appearance: none;
+                margin: 0;
+            }
+        }
+    }
+
+    button {
+        width: 100%;
+        padding: 12px;
+        background-color: var(--ticket300);
+        color: var(--black);
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+        font-weight: bold;
+        margin-top: 20px;
+        transition: background-color 0.3s ease;
+
+        &:hover {
+            background-color: var(--ticket200);
+        }
+
+        &:disabled {
+            background-color: var(--white400);
+            cursor: not-allowed;
+        }
+    }
+}
+
+.loading-wrapper {
+    text-align: center;
+    margin-top: 40px;
+
+    p {
+        color: var(--white200);
+        margin-top: 20px;
+        font-size: 14px;
+    }
+
+    .loading-spinner {
+        margin: 0 auto;
+        width: 40px;
+        height: 40px;
+        border: 4px solid var(--black300);
+        border-top: 4px solid var(--ticket300);
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    }
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}

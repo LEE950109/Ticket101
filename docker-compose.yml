@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:80" # 로컬의 3000번 포트를 컨테이너의 80번 포트에 매핑
+    environment:
+      - REACT_APP_API_URL=http://localhost:5000 # 환경 변수 예시 (백엔드와 연동 시 필요)
+     
+    volumes:
+      - .:/app
+    stdin_open: true
+    tty: true

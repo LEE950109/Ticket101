@@ -1,0 +1,389 @@
+#mypage {
+    padding-top: 100px;
+    background-color: var(--black100);
+    min-height: 100vh;
+    color: var(--white);
+
+    .mypage__inner {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+    }
+
+    .mypage__title {
+        font-size: 28px;
+        font-weight: bold;
+        margin-bottom: 40px;
+    }
+
+    .mypage__section {
+        background-color: var(--black200);
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 30px;
+
+        .section__header {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-left: 25px;
+
+            h3 {
+                font-size: 20px;
+                font-weight: bold;
+            }
+
+            .header__left {
+                margin-right: auto;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+
+                h3 {
+                    font-size: 20px;
+                    font-weight: bold;
+                }
+
+                .count {
+                    background-color: var(--black300);
+                    color: var(--white200);
+                    padding: 2px 8px;
+                    border-radius: 12px;
+                    font-size: 14px;
+                    min-width: 24px;
+                    text-align: center;
+                }
+
+                .star-icon {
+                    color: var(--white);
+                    font-size: 20px;
+                    margin-left: 0px;
+                    transform: translateY(+1px);
+                }
+            }
+
+            .delete-all-btn {
+                padding: 6px 12px;
+                background: none;
+                border: 1px solid var(--black200);
+                border-radius: 4px;
+                color: var(--white200);
+                font-size: 14px;
+                cursor: pointer;
+                transition: all 0.3s ease;
+
+                &:hover {
+                    background-color: var(--calendar-sun);
+                    color: var(--white);
+                }
+
+                &:disabled {
+                    border-color: var(--black400);
+                    color: var(--black400);
+                    cursor: not-allowed;
+
+                    &:hover {
+                        background: none;
+                        color: var(--black400);
+                    }
+                }
+            }
+
+            .calendar-icon {
+                margin-left: 10px;
+                font-size: 20px;
+                color: var(--white);
+                transform: translateY(+1px);
+            }
+        }
+    }
+
+    .favorite__list {
+        .favorite-item {
+            position: relative;
+            margin: 40px 10px;
+            
+            a {
+                text-decoration: none;
+                color: var(--white);
+                display: block;
+                
+                img {
+                    width: 100%;
+                    height: 280px;
+                    object-fit: cover;
+                    border-radius: 4px;
+                }
+                
+                .favorite-info {
+                    margin-top: 10px;
+                    
+                    h3 {
+                        font-size: 14px;
+                        text-align: center;
+                        white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        margin-bottom: 5px;
+                    }
+                    
+                    p {
+                        font-size: 12px;
+                        color: var(--white200);
+                        text-align: center;
+                    }
+                }
+            }
+        }
+    }
+
+    .calendar__container {
+        background: var(--black300);
+        padding: 20px;
+        border-radius: 12px;
+        
+        .fc {
+            --fc-border-color: var(--black500);        
+            --fc-page-bg-color: var(--black300);       
+            --fc-neutral-bg-color: var(--black300);    
+            --fc-today-bg-color: var(--black400);      
+            
+            color: var(--white200);
+            font-size: 12px;
+
+            .fc-toolbar-title {
+                color: var(--white);
+                font-size: 25px;
+                padding-left: 65px;
+            }
+
+            .fc-daygrid-day {
+                height: 100px !important;  
+            }
+
+            // Custom event styles
+            .custom-event {
+                margin: 2px 0;
+                padding: 2px 4px !important;
+                font-size: 10px !important;
+                border-radius: 10px !important;
+                height: 18px !important;
+                line-height: 13px !important;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                border: none !important;
+                opacity: 0.9;
+                color: var(--white100);
+                text-align: center;
+                text-shadow: 
+                    -1px -1px 0 rgba(0,0,0,0.1),
+                    1px -1px 0 rgba(0,0,0,0.1),
+                    -1px 1px 0 rgba(0,0,0,0.1),
+                    1px 1px 0 rgba(0,0,0,0.1);
+                font-weight: 600 !important;
+                color: var(--white) !important;
+                
+                &:hover {
+                    opacity: 1;
+                }
+            }
+
+            // Button styles
+            .fc-button {
+                background: none;
+                border: none;
+                color: var(--white300);
+
+                &:hover {
+                    color: var(--white);
+                }
+
+                &:focus {
+                    box-shadow: 0 0 0 0.2rem var(--black300) !important;
+                }
+            }
+
+            // Weekend colors
+            .fc-day-sun { color: var(--calendar-sun); }
+            .fc-day-sat { color: var(--calendar-sat); }
+
+            // More link styles
+            .fc-more-link {
+                color: var(--white200);
+                &:hover {
+                    color: var(--white);
+                }
+            }
+        }
+
+        h3 {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            padding-left: 25px;
+        }
+    }
+
+    .profile__edit {
+        display: flex;
+        justify-content: center;
+
+        .edit__button {
+            background-color: var(--ticket300);
+            color: var(--white);
+            border: none;
+            padding: 12px 30px;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+
+            &:hover {
+                background-color: var(--ticket00);
+            }
+        }
+    }
+
+
+    .show__list-container {
+        position: relative;
+        overflow: hidden;
+        padding: 20px 0px 10px;
+        margin: 20px 0;
+
+        .show__list {
+            display: flex;
+            flex-wrap: nowrap;
+            gap: 12px;
+            padding: 10px 25px;
+            margin: 0;
+            transition: transform 0.3s ease;
+            
+            .show__item {
+                flex: 0 0 200px;
+                min-width: 200px;
+                width: 200px;
+                position: relative;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                margin-top: 0;
+
+                a {
+                    width: 100%;
+                    text-align: center;
+                    text-decoration: none;
+                }
+
+                .show__image-container {
+                    width: 100%;
+                    aspect-ratio: 2/3;
+                    margin-bottom: 8px;
+                    overflow: hidden;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    
+                    img {
+                        width: 100%;
+                        height: 100%;
+                        object-fit: cover;
+                    }
+                }
+
+                .show__title {
+                    font-size: 14px;
+                    text-align: center;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    padding: 0 10px 8px;
+                    color: var(--white);
+                    margin: 0;
+                    max-width: 100%;
+                }
+
+                .remove-favorite {
+                    position: absolute;
+                    right: 4px;
+                    top: 4px;
+                    background: none;
+                    border: none;
+                    color: var(--white);
+                    cursor: pointer;
+                    font-size: 18px;
+                    transition: all 0.2s ease;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    width: 20px;
+                    height: 20px;
+                    z-index: 1;
+                    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8),
+                               -2px -2px 4px rgba(0, 0, 0, 0.8),
+                               2px -2px 4px rgba(0, 0, 0, 0.8),
+                               -2px 2px 4px rgba(0, 0, 0, 0.8);
+
+                    &:hover {
+                        transform: scale(1.2);
+                        color: var(--calendar-sun);
+                    }
+
+                    &::before {
+                        content: "×";
+                        font-weight: bold;
+                        line-height: 1;
+                    }
+                }
+
+                &:hover .remove-favorite {
+                    opacity: 1;
+                }
+            }
+        }
+
+        .slide-btn {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            background: transparent;
+            color: var(--white100);
+            border: none;
+            cursor: pointer;
+            z-index: 10;
+            width: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            
+            svg {
+                font-size: 24px;
+                filter: drop-shadow(0 0 2px var(--black100));
+            }
+            
+            &.prev { 
+                left: 0;
+                background: linear-gradient(to right, var(--black200), transparent);
+            }
+            &.next { 
+                right: 0; 
+                background: linear-gradient(to left, var(--black200), transparent);
+            }
+            
+            &:disabled {
+                opacity: 0;
+                cursor: not-allowed;
+            }
+        }
+    }
+
+    // 즐겨찾기가 없을 때 메시지 스타일
+    .show__list p {
+        width: 100%;
+        text-align: center;
+        padding: 40px 0;
+        color: var(--white200);
+    }
+}
