@@ -9,6 +9,7 @@ const Home = () => {
     const { user, loading } = useAuth();
     const isAuthenticated = !!(user && user.sub);
     console.log('로그인 상태:', isAuthenticated);
+    console.log("api 주소 확인: ", process.env.BACKEND_API_URL)
     
     const [favorites, setFavorites] = useState([]);
     const [performances, setPerformances] = useState({
