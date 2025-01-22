@@ -4,10 +4,10 @@ phases:
   install:
     commands:
       - echo Installing prerequisites...
-      # - AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
-      # - AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
-      # - AWS_ACCOUNT_ID=$AWS_ACCOUNT_ID
-      # - AWS_REGION=$AWS_DEFAULT_REGION
+      - AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
+      - AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
+      - AWS_ACCOUNT_ID=$AWS_ACCOUNT_ID
+      - AWS_REGION=$AWS_DEFAULT_REGION
       - curl -O https://s3.us-west-2.amazonaws.com/amazon-eks/1.27.6/2023-10-17/bin/linux/amd64/kubectl
       - chmod +x ./kubectl
       - mv ./kubectl /usr/local/bin/kubectl
@@ -38,27 +38,15 @@ phases:
       - export BACKEND_API_URL=$(aws ssm get-parameter --name "BACKEND_API_URL" --with-decryption --query "Parameter.Value" --output text)
       - echo env parameter test BACKEND_URL... $BACKEND_API_URL
 
-      - export AWS_ACCESS_KEY_ID=$(aws ssm get-parameter --name "ACCESS_KEY_ID" --with-decryption --query "Parameter.Value" --output text)
-      - echo env parameter test AWS_ACCESS_KEY_ID... $AWS_ACCESS_KEY_ID
-
-      - export AWS_SECRET_ACCESS_KEY=$(aws ssm get-parameter --name "SECRET_ACCESS_KEY" --with-decryption --query "Parameter.Value" --output text)
-      - echo env parameter test AWS_SECRET_ACCESS_KEY... $AWS_SECRET_ACCESS_KEY
-
-      - export AWS_ACCOUNT_ID=$(aws ssm get-parameter --name "ACCOUNT_ID" --with-decryption --query "Parameter.Value" --output text)
-      - echo env parameter test AWS_ACCOUNT_ID... $AWS_ACCOUNT_ID
-
-      - export AWS_REGION=$(aws ssm get-parameter --name "REGION" --with-decryption --query "Parameter.Value" --output text)
-      - echo env parameter test AWS_REGION... $AWS_REGION
-
       - echo Creating Kubernetes Secrets...
       - kubectl delete secret app-secrets || true
-      - kubectl create secret generic app-secrets --from-literal=AWS_REGION=$AWS_REGION --from-literal=AWS_ACCOUNT_ID=$AWS_ACCOUNT_ID --from-literal=AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY --from-literal=AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID --from-literal=BACKEND_API_URL=$BACKEND_API_URL --from-literal=REACT_APP_AWS_PROJECT_REGION=$REACT_APP_AWS_PROJECT_REGION --from-literal=REACT_APP_AWS_COGNITO_IDENTITY_POOL_ID=$REACT_APP_AWS_COGNITO_IDENTITY_POOL_ID --from-literal=REACT_APP_AWS_USER_POOLS_ID=$REACT_APP_AWS_USER_POOLS_ID --from-literal=REACT_APP_AWS_USER_POOLS_WEB_CLIENT_ID=$REACT_APP_AWS_USER_POOLS_WEB_CLIENT_ID
+      - kubectl create secret generic app-secrets --from-literal=BACKEND_API_URL=$BACKEND_API_URL --from-literal=REACT_APP_AWS_PROJECT_REGION=$REACT_APP_AWS_PROJECT_REGION --from-literal=REACT_APP_AWS_COGNITO_IDENTITY_POOL_ID=$REACT_APP_AWS_COGNITO_IDENTITY_POOL_ID --from-literal=REACT_APP_AWS_USER_POOLS_ID=$REACT_APP_AWS_USER_POOLS_ID --from-literal=REACT_APP_AWS_USER_POOLS_WEB_CLIENT_ID=$REACT_APP_AWS_USER_POOLS_WEB_CLIENT_ID
       - echo Pre-build step completed.
 
   build:
     commands:
       - echo Building the Docker image...
-      - docker build -t test2:latest --build-arg AWS_REGION=$AWS_REGION --build-arg AWS_ACCOUNT_ID=$AWS_ACCOUNT_ID --build-arg AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY --build-arg AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID --build-arg BACKEND_API_URL=$BACKEND_API_URL --build-arg REACT_APP_AWS_PROJECT_REGION=$REACT_APP_AWS_PROJECT_REGION --build-arg REACT_APP_AWS_COGNITO_IDENTITY_POOL_ID=$REACT_APP_AWS_COGNITO_IDENTITY_POOL_ID --build-arg REACT_APP_AWS_USER_POOLS_ID=$REACT_APP_AWS_USER_POOLS_ID --build-arg REACT_APP_AWS_USER_POOLS_WEB_CLIENT_ID=$REACT_APP_AWS_USER_POOLS_WEB_CLIENT_ID .
+      - docker build -t test2:latest --build-arg BACKEND_API_URL=$BACKEND_API_URL --build-arg REACT_APP_AWS_PROJECT_REGION=$REACT_APP_AWS_PROJECT_REGION --build-arg REACT_APP_AWS_COGNITO_IDENTITY_POOL_ID=$REACT_APP_AWS_COGNITO_IDENTITY_POOL_ID --build-arg REACT_APP_AWS_USER_POOLS_ID=$REACT_APP_AWS_USER_POOLS_ID --build-arg REACT_APP_AWS_USER_POOLS_WEB_CLIENT_ID=$REACT_APP_AWS_USER_POOLS_WEB_CLIENT_ID .
       - docker tag test2:latest 205930629963.dkr.ecr.ap-northeast-2.amazonaws.com/test2:latest
       - echo Pushing Docker image to ECR...
       - docker push 205930629963.dkr.ecr.ap-northeast-2.amazonaws.com/test2:latest
