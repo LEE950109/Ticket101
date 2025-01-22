@@ -30,10 +30,12 @@ const Home = () => {
     useEffect(() => {
         const fetchData = async () => {
             console.log('fetchData 실행, 로그인 상태:', isAuthenticated);
+            console.log("api 주소 확인: ", process.env.BACKEND_API_URL)
             if (loading) return;
 
             try {
                 const response = await fetch(`${process.env.BACKEND_API_URL}/api/performances`);
+                
                 const data = await response.json();
 
                 let performancesData = {
