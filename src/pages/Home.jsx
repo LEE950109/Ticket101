@@ -10,6 +10,8 @@ const Home = () => {
     const isAuthenticated = !!(user && user.sub);
     console.log('로그인 상태:', isAuthenticated);
     console.log('업데이트 체크: http://api.ticket101.kr');
+    console.log('test:', process.env.BACKEND_API_URL || 'error url');
+    
 
     const [favorites, setFavorites] = useState([]);
     const [performances, setPerformances] = useState({
