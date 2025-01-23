@@ -5,7 +5,7 @@ import { useAuth } from '../context/AuthContext';
 
 const PreferencesArtists = () => {
   const navigate = useNavigate();
-
+  console.log('즐겨찾기 전 체크---');
   // const { user } = useAuth();
   // const userId = user?.sub; // user가 null이 아닌 경우에만 sub를 가져옴
   // console.log('PreferencesArtists에서 user 확인:', user);
