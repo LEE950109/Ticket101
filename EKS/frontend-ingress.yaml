@@ -5,17 +5,26 @@ metadata:
   annotations:
     kubernetes.io/ingress.class: alb                           # ALB를 지정
     alb.ingress.kubernetes.io/scheme: internet-facing          # 외부 접근 가능
-    alb.ingress.kubernetes.io/target-type: ip                # Pod의 IP를 직접 대상으로 사용
+    alb.ingress.kubernetes.io/target-type: ip                 # Pod의 IP를 직접 대상으로 사용
 spec:
   ingressClassName: alb
   rules:
-    - host: ticket101.kr               
+    - host: ticket101.kr
       http:
         paths:
+          # 프론트엔드 서비스로 라우팅
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: frontend-service   # 프론트엔드 서비스 이름
+                port:
+                  number: 80             # 프론트엔드 서비스 포트
+          # 백엔드 서비스로 라우팅
           - path: /api
             pathType: Prefix
             backend:
               service:
-                name: backend-service
+                name: backend-service    # 백엔드 서비스 이름
                 port:
-                  number: 80
+                  number: 80             # 백엔드 서비스 포트
