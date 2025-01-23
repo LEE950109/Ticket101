@@ -9,8 +9,8 @@ const Home = () => {
     const { user, loading } = useAuth();
     const isAuthenticated = !!(user && user.sub);
     console.log('로그인 상태:', isAuthenticated);
-    console.log("api 주소 확인: ", process.env.BACKEND_API_URL)
-    
+    console.log('업데이트 체크: http://api.ticket101.kr');
+
     const [favorites, setFavorites] = useState([]);
     const [performances, setPerformances] = useState({
         recommended: [],
@@ -31,12 +31,13 @@ const Home = () => {
     useEffect(() => {
         const fetchData = async () => {
             console.log('fetchData 실행, 로그인 상태:', isAuthenticated);
-            console.log("api 주소 확인: ", process.env.BACKEND_API_URL)
+            
             if (loading) return;
 
             try {
-                const response = await fetch(`${process.env.BACKEND_API_URL}/api/performances`);
-                
+
+                const response = await fetch(`http://api.ticket101.kr/api/performances`);
+                console.log("api 주소 확인: ", process.env.BACKEND_API_URL)
                 const data = await response.json();
 
                 let performancesData = {
@@ -55,7 +56,7 @@ const Home = () => {
                         const userId = parsedUserInfo.sub; // 'sub' 값 추출
                         console.log('sub 값:', userId);
 
-                        const response2 = await fetch(`${process.env.BACKEND_API_URL}/api/performances/recommend/${userId}`);
+                        const response2 = await fetch(`http://api.ticket101.kr/api/performances/recommend/${userId}`);
                         const recommendData = await response2.json();
                         console.log('recommend_data:', recommendData);
 
@@ -69,7 +70,7 @@ const Home = () => {
                 if (isAuthenticated) {
                     try {
                         const { username } = await getCurrentUser();
-                        const favoritesResponse = await fetch(`${process.env.BACKEND_API_URL}/api/favorites/${username}`);
+                        const favoritesResponse = await fetch(`http://api.ticket101.kr/api/favorites/${username}`);
                         if (favoritesResponse.ok) {
                             const favoritesData = await favoritesResponse.json();
                             setFavorites(favoritesData);
@@ -103,14 +104,14 @@ const Home = () => {
             const isAlreadyFavorite = favorites.some(fav => fav.performance_id === show.performance_id);
 
             if (isAlreadyFavorite) {
-                const response = await fetch(`${process.env.BACKEND_API_URL}/api/favorites/${username}/${show.performance_id}`, {
+                const response = await fetch(`http://api.ticket101.kr/api/favorites/${username}/${show.performance_id}`, {
                     method: 'DELETE'
                 });
 
                 if (!response.ok) throw new Error('즐겨찾기 삭제 실패');
                 setFavorites(favorites.filter(fav => fav.performance_id !== show.performance_id));
             } else {
-                const response = await fetch(`${process.env.BACKEND_API_URL}/api/favorites/${username}`, {
+                const response = await fetch(`http://api.ticket101.kr/api/favorites/${username}`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

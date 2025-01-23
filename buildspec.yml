@@ -36,7 +36,7 @@ phases:
       - echo env parameter test REACT_APP_AWS_USER_POOLS_WEB_CLIENT_ID... $REACT_APP_AWS_USER_POOLS_WEB_CLIENT_ID
 
       - export BACKEND_API_URL=$(aws ssm get-parameter --name "BACKEND_API_URL" --with-decryption --query "Parameter.Value" --output text)
-      - echo env parameter test BACKEND_URL... $BACKEND_API_URL
+      - echo env parameter test BACKEND_API_URL... $BACKEND_API_URL
 
       - echo Creating Kubernetes Secrets...
       - kubectl delete secret app-secrets || true

@@ -26,7 +26,7 @@ const PreferencesArtists = () => {
         throw new Error('검색어는 2글자 이상 입력해주세요.');
       }
 
-      const response = await fetch(`${process.env.BACKEND_API_URL}/api/survey/artists/search?query=${query}`);
+      const response = await fetch(`http://api.ticket101.kr/api/survey/artists/search?query=${query}`);
       const data = await response.json();
       
       // 서버 응답 확인

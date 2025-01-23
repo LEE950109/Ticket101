@@ -73,7 +73,7 @@ export const PreferencesProvider = ({ children }) => {
         console.log('전송 데이터:', formattedData);
 
       // 디버깅을 위한 로그 추가
-      const response = await fetch(`${process.env.BACKEND_API_URL}/api/survey/preferences`, {
+      const response = await fetch(`http://api.ticket101.kr/api/survey/preferences`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formattedData),

@@ -19,7 +19,7 @@ const Search = () => {
             if (query) {
                 setLoading(true);
                 try {
-                    const url = new URL(`${process.env.BACKEND_API_URL}/api/search`);
+                    const url = new URL(`http://api.ticket101.kr/api/search`);
                     url.searchParams.append('query', query);
                     const response = await fetch(url);
                     

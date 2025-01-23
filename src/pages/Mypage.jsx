@@ -33,7 +33,7 @@ const Mypage = () => {
             // 인증된 경우에만 즐겨찾기 데이터 가져오기
             try {
                 const { username } = await getCurrentUser();
-                const response = await fetch(`${process.env.BACKEND_API_URL}/api/favorites/${username}`);
+                const response = await fetch(`http://api.ticket101.kr/api/favorites/${username}`);
                 
                 if (!response.ok) {
                     throw new Error('즐겨찾기 조회 실패');
@@ -70,7 +70,7 @@ const Mypage = () => {
                 return;
             }
 
-            const response = await fetch(`${process.env.BACKEND_API_URL}/api/favorites/${username}/${performance_id}`, {
+            const response = await fetch(`http://api.ticket101.kr/api/favorites/${username}/${performance_id}`, {
                 method: 'DELETE'
             });
 
@@ -91,7 +91,7 @@ const Mypage = () => {
             if (!username) return;
 
             const deletePromises = favorites.map(fav => 
-                fetch(`${process.env.BACKEND_API_URL}/api/favorites/${username}/${fav.performance_id}`, {
+                fetch(`http://api.ticket101.kr/api/favorites/${username}/${fav.performance_id}`, {
                     method: 'DELETE'
                 })
             );
