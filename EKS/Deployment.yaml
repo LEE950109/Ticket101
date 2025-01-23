@@ -47,4 +47,4 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: app-secrets
-                  key: "http://api.ticket101.kr"
+                  key: BACKEND_API_URL
