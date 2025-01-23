@@ -12,10 +12,10 @@ spec:
     - host: ticket101.kr               
       http:
         paths:
-          - path: /
+          - path: /api
             pathType: Prefix
             backend:
               service:
-                name: frontend-service
+                name: backend-service
                 port:
                   number: 80
