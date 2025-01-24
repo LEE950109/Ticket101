@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-deployment
+  namespace: default
+  labels:
+    app: auth
+    environment: production
+    version: v1.0.0
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: auth
+  template:
+    metadata:
+      labels:
+        app: auth
+    spec:
+      nodeSelector:
+        role: backend
+      containers:
+      - name: auth
+        image: 205930629963.dkr.ecr.ap-northeast-2.amazonaws.com/ticket101-ecr:auth-latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 5002        
+        env:
+            - name: FRONTEND_URL
+              valueFrom:
+                secretKeyRef:
+                  name: app-secrets2
+                  key: FRONTEND_URL
+            - name: AWS_REGION
+              value: ap-northeast-2 # 적절한 AWS 리전 값
+            - name: ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: app-secrets2
+                  key: ACCESS_KEY_ID
+            - name: SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: app-secrets2
+                  key: SECRET_ACCESS_KEY

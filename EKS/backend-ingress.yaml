@@ -1,0 +1,56 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: backend-ingress
+  namespace: default
+  annotations:
+    kubernetes.io/ingress.class: alb                       # ALB 사용 설정
+    alb.ingress.kubernetes.io/scheme: internal           # 내부용 ALB
+    # alb.ingress.kubernetes.io/scheme: internet-facing 
+    # alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":80}]'
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/healthcheck-path: /health                # Pod의 IP를 직접 대상으로 사용
+  labels:
+    app: backend-ingress
+spec:
+  ingressClassName: alb
+  rules:
+  - host: api.ticket101.kr
+    http:
+      paths:
+      - path: /api/auth
+        pathType: Prefix
+        backend:
+          service:
+            name: auth-service
+            port:
+              number: 80
+      - path: /api/favorites
+        pathType: Prefix
+        backend:
+          service:
+            name: favorite-service
+            port:
+              number: 80
+      - path: /api/performances
+        pathType: Prefix
+        backend:
+          service:
+            name: performance-service
+            port:
+              number: 80
+      - path: /api/search
+        pathType: Prefix
+        backend:
+          service:
+            name: search-service
+            port:
+              number: 80
+      - path: /api/survey
+        pathType: Prefix
+        backend:
+          service:
+            name: survey-service
+            port:
+              number: 80
+        

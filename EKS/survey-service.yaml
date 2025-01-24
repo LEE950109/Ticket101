@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: survey-service
+  namespace: default
+  labels:
+    app: survey
+spec:
+  type: ClusterIP  # ClusterIP로 변경
+  selector:
+    app: survey
+  ports:
+  - name: survey-service
+    port: 80
+    targetPort: 5003

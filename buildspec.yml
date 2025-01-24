@@ -1,0 +1,106 @@
+version: 0.2
+
+phases:
+  install:
+    commands:
+      - echo Installing kubectl...
+      - AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
+      - AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
+      - AWS_ACCOUNT_ID=$AWS_ACCOUNT_ID
+      - AWS_REGION=$AWS_DEFAULT_REGION
+
+      - curl -O https://s3.us-west-2.amazonaws.com/amazon-eks/1.27.6/2023-10-17/bin/linux/amd64/kubectl
+      - chmod +x ./kubectl
+      - mv ./kubectl /usr/local/bin/kubectl
+      - mkdir -p ~/.kube
+      - echo Setting up kubeconfig for EKS...
+      - aws eks --region ap-northeast-2 update-kubeconfig --name test3
+      - echo Verifying Kubernetes access...
+      - kubectl version --client
+
+  pre_build:
+    commands:
+      - echo Logging in to Amazon ECR...
+      - aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin 205930629963.dkr.ecr.ap-northeast-2.amazonaws.com
+      - echo Pre-build step completed.
+      - export FRONTEND_URL=$(aws ssm get-parameter --name "FRONTEND_URL" --with-decryption --query "Parameter.Value" --output text)
+      - echo env parameter FRONTEND_URL... $FRONTEND_URL
+
+      - export ACCESS_KEY_ID=$(aws ssm get-parameter --name "ACCESS_KEY_ID" --with-decryption --query "Parameter.Value" --output text)
+      - echo env parameter ACCESS_KEY_ID... $ACCESS_KEY_ID
+
+      - export SECRET_ACCESS_KEY=$(aws ssm get-parameter --name "SECRET_ACCESS_KEY" --with-decryption --query "Parameter.Value" --output text)
+      - echo env parameter SECRET_ACCESS_KEY... $SECRET_ACCESS_KEY
+
+      - kubectl delete secret app-secrets2 || true
+      - kubectl create secret generic app-secrets2 --from-literal=ACCESS_KEY_ID=$ACCESS_KEY_ID --from-literal=SECRET_ACCESS_KEY=$SECRET_ACCESS_KEY --from-literal=FRONTEND_URL=$FRONTEND_URL
+
+  build:
+    commands:
+      - echo Building and pushing Docker images to ticket101-ecr...
+
+      - echo Building auth service...
+      - docker build --no-cache -t ticket101-ecr:auth-latest --build-arg ACCESS_KEY_ID=$ACCESS_KEY_ID --build-arg SECRET_ACCESS_KEY=$SECRET_ACCESS_KEY --build-arg FRONTEND_URL=$FRONTEND_URL ./backend/auth
+      - docker tag ticket101-ecr:auth-latest 205930629963.dkr.ecr.ap-northeast-2.amazonaws.com/ticket101-ecr:auth-latest
+      - docker push 205930629963.dkr.ecr.ap-northeast-2.amazonaws.com/ticket101-ecr:auth-latest
+
+      - echo Building favorite service...
+      - docker build --no-cache -t ticket101-ecr:favorite-latest --build-arg ACCESS_KEY_ID=$ACCESS_KEY_ID --build-arg SECRET_ACCESS_KEY=$SECRET_ACCESS_KEY --build-arg ACCESS_KEY_ID=$ACCESS_KEY_ID --build-arg SECRET_ACCESS_KEY=$SECRET_ACCESS_KEY --build-arg FRONTEND_URL=$FRONTEND_URL ./backend/favorite
+      - docker tag ticket101-ecr:favorite-latest 205930629963.dkr.ecr.ap-northeast-2.amazonaws.com/ticket101-ecr:favorite-latest
+      - docker push 205930629963.dkr.ecr.ap-northeast-2.amazonaws.com/ticket101-ecr:favorite-latest
+
+      - echo Building performance service...
+      - docker build --no-cache -t ticket101-ecr:performance-latest --build-arg ACCESS_KEY_ID=$ACCESS_KEY_ID --build-arg SECRET_ACCESS_KEY=$SECRET_ACCESS_KEY --build-arg FRONTEND_URL=$FRONTEND_URL ./backend/performance
+      - docker tag ticket101-ecr:performance-latest 205930629963.dkr.ecr.ap-northeast-2.amazonaws.com/ticket101-ecr:performance-latest
+      - docker push 205930629963.dkr.ecr.ap-northeast-2.amazonaws.com/ticket101-ecr:performance-latest
+
+      - echo Building search service...
+      - docker build --no-cache -t ticket101-ecr:search-latest --build-arg ACCESS_KEY_ID=$ACCESS_KEY_ID --build-arg SECRET_ACCESS_KEY=$SECRET_ACCESS_KEY --build-arg FRONTEND_URL=$FRONTEND_URL ./backend/search
+      - docker tag ticket101-ecr:search-latest 205930629963.dkr.ecr.ap-northeast-2.amazonaws.com/ticket101-ecr:search-latest
+      - docker push 205930629963.dkr.ecr.ap-northeast-2.amazonaws.com/ticket101-ecr:search-latest
+
+      - echo Building survey service...
+      - docker build --no-cache -t ticket101-ecr:survey-latest --build-arg ACCESS_KEY_ID=$ACCESS_KEY_ID --build-arg SECRET_ACCESS_KEY=$SECRET_ACCESS_KEY --build-arg FRONTEND_URL=$FRONTEND_URL ./backend/survey
+      - docker tag ticket101-ecr:survey-latest 205930629963.dkr.ecr.ap-northeast-2.amazonaws.com/ticket101-ecr:survey-latest
+      - docker push 205930629963.dkr.ecr.ap-northeast-2.amazonaws.com/ticket101-ecr:survey-latest
+
+  post_build:
+    commands:
+      - echo Deploying auth service...
+      - kubectl apply -f ./EKS/auth-deployment.yaml
+      - kubectl apply -f ./EKS/auth-service.yaml
+
+      - echo Deploying favorite service...
+      - kubectl apply -f ./EKS/favorite-deployment.yaml
+      - kubectl apply -f ./EKS/favorite-service.yaml
+
+      - echo Deploying performance service...
+      - kubectl apply -f ./EKS/performance-deployment.yaml
+      - kubectl apply -f ./EKS/performance-service.yaml
+
+      - echo Deploying search service...
+      - kubectl apply -f ./EKS/search-deployment.yaml
+      - kubectl apply -f ./EKS/search-service.yaml
+
+      - echo Deploying survey service...
+      - kubectl apply -f ./EKS/survey-deployment.yaml
+      - kubectl apply -f ./EKS/survey-service.yaml
+
+      - echo Applying Ingress rules...
+      - kubectl apply -f ./EKS/backend-ingress.yaml
+
+      - echo Deployment completed on $(date).
+
+artifacts:
+  files:
+    - EKS/auth-deployment.yaml
+    - EKS/auth-service.yaml
+    - EKS/favorite-deployment.yaml
+    - EKS/favorite-service.yaml
+    - EKS/performance-deployment.yaml
+    - EKS/performance-service.yaml
+    - EKS/search-deployment.yaml
+    - EKS/search-service.yaml
+    - EKS/survey-deployment.yaml
+    - EKS/survey-service.yaml
+    - EKS/backend-ingress.yaml

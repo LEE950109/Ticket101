@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: favorite-service
+  namespace: default
+  labels:
+    app: favorite
+spec:
+  type: ClusterIP  # ClusterIP로 변경
+  selector:
+    app: favorite
+  ports:
+  - name: favorite-service
+    port: 80
+    targetPort: 5004
+
