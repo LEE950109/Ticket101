@@ -4,7 +4,7 @@ const Database = require('../utils/database');
 const db = new Database();
 const Database2 = require('../utils/database2');
 const db2 = new Database2();
-
+const cors = require('cors');
 const app = express();
 app.use(cors({
     origin: process.env.FRONTEND_URL,
