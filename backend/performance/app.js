@@ -5,8 +5,7 @@ const app = express();
 
 // CORS 설정
 app.use(cors({
-    origin: 'http://ticket101.kr',
-    credentials: true
+    origin: process.env.FRONTEND_URL,
 }));
 app.use(express.json());
 
