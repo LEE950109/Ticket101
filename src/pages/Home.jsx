@@ -38,10 +38,7 @@ const Home = () => {
 
             try {
 
-                const response = await fetch(`http://api.ticket101.kr/api/performances`, {
-                    method: 'GET',
-                    credentials: 'include', // 쿠키 포함
-                });
+                const response = await fetch(`http://api.ticket101.kr/api/performances`);
                 
                 console.log("api 주소 확인: ", process.env.BACKEND_API_URL)
                 const data = await response.json();
