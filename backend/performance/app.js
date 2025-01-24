@@ -11,7 +11,7 @@ app.use(cors({
 app.use(express.json());
 
 
-console.log('Front Url Check:', process.env.SECRET_ACCESS_KEY,);
+console.log('Front Url Check:', process.env.FRONTEND_URL,);
 
 
 

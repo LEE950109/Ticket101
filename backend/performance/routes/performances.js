@@ -6,6 +6,11 @@ const db = new Database();
 const Database2 = require('../utils/database2');
 const db2 = new Database2();
 
+app.use(cors({
+    origin: process.env.FRONTEND_URL,
+    credentials: true
+}));
+
 // 모든 공연 정보 가져오기
 router.get('/', async (req, res) => {
     try {
