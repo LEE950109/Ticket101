@@ -2,13 +2,12 @@ const express = require('express');
 const router = express.Router();
 const Database = require('../utils/database');
 const db = new Database();
-
 const Database2 = require('../utils/database2');
 const db2 = new Database2();
 
+const app = express();
 app.use(cors({
     origin: process.env.FRONTEND_URL,
-    credentials: true
 }));
 
 // 모든 공연 정보 가져오기
