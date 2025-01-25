@@ -5,8 +5,8 @@ metadata:
   namespace: default
   annotations:
     kubernetes.io/ingress.class: alb                       # ALB 사용 설정
-    # alb.ingress.kubernetes.io/scheme: internal           # 내부용 ALB
-    alb.ingress.kubernetes.io/scheme: internet-facing 
+    alb.ingress.kubernetes.io/scheme: internal           # 내부용 ALB
+#    alb.ingress.kubernetes.io/scheme: internet-facing
     # alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":80}]'
     alb.ingress.kubernetes.io/target-type: ip
     alb.ingress.kubernetes.io/healthcheck-path: /health                # Pod의 IP를 직접 대상으로 사용
