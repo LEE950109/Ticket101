@@ -40,7 +40,7 @@ const ShowCalendar = ({ events = [] }) => {
 
     const calendarEvents = events.map(show => {
         const startDate = show.start_date ? new Date(show.start_date).toISOString().split('T')[0] : null;
-        const endDate = show.end_date ? new Date(new Date(show.end_date).setDate(new Date(show.end_date).getDate() + 1)).toISOString().split('T')[0] : null;
+        const endDate = show.end_date ? new Date(show.end_date).toISOString().split('T')[0] : null;
 
         const eventColor = getEventColor(show.performance_id);
 
