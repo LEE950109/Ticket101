@@ -14,7 +14,7 @@ phases:
       - mv ./kubectl /usr/local/bin/kubectl
       - mkdir -p ~/.kube
       - echo Setting up kubeconfig for EKS...
-      - aws eks --region ap-northeast-2 update-kubeconfig --name test3
+      - aws eks --region ap-northeast-2 update-kubeconfig --name ticket101-cluster
       - echo Verifying Kubernetes access...
       - kubectl version --client
 
