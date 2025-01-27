@@ -13,5 +13,3 @@ spec:
   - name: auth-service
     port: 80
     targetPort: 5002
-
- 
