@@ -15,8 +15,8 @@ metadata:
 spec:
   ingressClassName: alb
   rules:
-#  - host: api.ticket101.kr
-  - http:
+  - host: api.ticket101.kr
+    http:
       paths:
       - path: /api/auth
         pathType: Prefix
