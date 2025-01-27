@@ -13,7 +13,7 @@ phases:
       - mv ./kubectl /usr/local/bin/kubectl
       - mkdir -p ~/.kube
       - echo Setting up kubeconfig for EKS...
-      - aws eks --region ap-northeast-2 update-kubeconfig --name test3
+      - aws eks --region ap-northeast-2 update-kubeconfig --name ticket101-cluster
       - echo Verifying Kubernetes access...
       - kubectl get pods --all-namespaces
 
@@ -26,7 +26,7 @@ phases:
       - export REACT_APP_AWS_PROJECT_REGION=$(aws ssm get-parameter --name "REACT_APP_AWS_PROJECT_REGION" --with-decryption --query "Parameter.Value" --output text)
       - echo env parameter testREACT_APP_AWS_PROJECT_REGION... $REACT_APP_AWS_PROJECT_REGION
 
-      - export REACT_APP_AWS_COGNITO_IDENTITY_POOL_ID=$(aws  ssmget-parameter --name "REACT_APP_AWS_COGNITO_IDENTITY_POOL_ID" --with-decryption --query "Parameter.Value" --output text)
+      - export REACT_APP_AWS_COGNITO_IDENTITY_POOL_ID=$(aws ssm get-parameter --name "REACT_APP_AWS_COGNITO_IDENTITY_POOL_ID" --with-decryption --query "Parameter.Value" --output text)
       - echo env parameter test REACT_APP_AWS_COGNITO_IDENTITY_POOL_ID... $REACT_APP_AWS_COGNITO_IDENTITY_POOL_ID
       
       - export REACT_APP_AWS_USER_POOLS_ID=$(aws ssm get-parameter --name "REACT_APP_AWS_USER_POOLS_ID" --with-decryption --query "Parameter.Value" --output text)
