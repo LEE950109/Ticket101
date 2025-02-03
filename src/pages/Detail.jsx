@@ -19,7 +19,7 @@ const Detail = () => {
         const fetchShowDetail = async () => {
             try {
                 setLoading(true);
-                const response = await fetch(`https://api.ticket101.kr/api/performances/${id}`);
+                const response = await fetch(`http://api.ticket101.kr/api/performances/${id}`);
                 if (!response.ok) {
                     throw new Error('공연 정보를 가져오는데 실패했습니다.');
                 }
@@ -29,7 +29,7 @@ const Detail = () => {
                 // 즐겨찾기 상태 확인 (5004 포트 사용)
                 try {
                     const { username } = await getCurrentUser();
-                    const favResponse = await fetch(`https://api.ticket101.kr/api/favorites/${username}`);
+                    const favResponse = await fetch(`http://api.ticket101.kr/api/favorites/${username}`);
                     if (favResponse.ok) {
                         const favorites = await favResponse.json();
                         setIsFavorite(favorites.some(fav => fav.performance_id === id));
@@ -63,7 +63,7 @@ const Detail = () => {
 
             // 검색어 단순화
             const searchQuery = encodeURIComponent(showName);  // 검색어 단순화
-            const url = `httpss://www.googleapis.com/youtube/v3/search?part=snippet&q=${searchQuery}&maxResults=1&type=video&key=${API_KEY}`;
+            const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${searchQuery}&maxResults=1&type=video&key=${API_KEY}`;
             
             console.log('검색 URL:', url);
             console.log('검색어:', searchQuery);
@@ -100,13 +100,13 @@ const Detail = () => {
             }
 
             if (isFavorite) {
-                const response = await fetch(`https://api.ticket101.kr/api/favorites/${username}/${showDetail.performance_id}`, {
+                const response = await fetch(`http://api.ticket101.kr/api/favorites/${username}/${showDetail.performance_id}`, {
                     method: 'DELETE'
                 });
 
                 if (!response.ok) throw new Error('즐겨찾기 삭제 실패');
             } else {
-                const response = await fetch(`https://api.ticket101.kr/api/favorites/${username}`, {
+                const response = await fetch(`http://api.ticket101.kr/api/favorites/${username}`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -244,7 +244,7 @@ const Detail = () => {
                     <iframe
                         width="100%"
                         height="500"
-                        src={`httpss://www.youtube.com/embed/${videoId}`}
+                        src={`https://www.youtube.com/embed/${videoId}`}
                         title="YouTube video player"
                         frameBorder="0"
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
