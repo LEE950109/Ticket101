@@ -1,0 +1,19 @@
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: auth-hpa
+  namespace: default
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: performance-deployment  # 타겟 Deployment
+  minReplicas: 1  # 최소 Pod 개수
+  maxReplicas: 5  # 최대 Pod 개수
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 50  # CPU 사용률이 50% 넘으면 확장

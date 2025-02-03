@@ -69,22 +69,27 @@ phases:
       - echo Deploying auth service...
       - kubectl apply -f ./EKS/auth-deployment.yaml
       - kubectl apply -f ./EKS/auth-service.yaml
+      - kubectl apply -f ./EKS/auth-hpa.yaml
 
       - echo Deploying favorite service...
       - kubectl apply -f ./EKS/favorite-deployment.yaml
       - kubectl apply -f ./EKS/favorite-service.yaml
+      - kubectl apply -f ./EKS/favorite-hpa.yaml
 
       - echo Deploying performance service...
       - kubectl apply -f ./EKS/performance-deployment.yaml
       - kubectl apply -f ./EKS/performance-service.yaml
+      - kubectl apply -f ./EKS/performance-hpa.yaml
 
       - echo Deploying search service...
       - kubectl apply -f ./EKS/search-deployment.yaml
       - kubectl apply -f ./EKS/search-service.yaml
+      - kubectl apply -f ./EKS/search-hpa.yaml
 
       - echo Deploying survey service...
       - kubectl apply -f ./EKS/survey-deployment.yaml
-      - kubectl apply -f ./EKS/survey-service.yaml
+      - kubectl apply -f ./EKS/survey-service.yaml\
+      - kubectl apply -f ./EKS/survey-hpa.yaml
 
       - echo Applying Ingress rules...
       - kubectl apply -f ./EKS/backend-ingress.yaml
@@ -104,3 +109,8 @@ artifacts:
     - EKS/survey-deployment.yaml
     - EKS/survey-service.yaml
     - EKS/backend-ingress.yaml
+    - EKS/auth-hpa.yaml
+    - EKS/favorite-hpa.yaml
+    - EKS/performance-hpa.yaml
+    - EKS/search-hpa.yaml
+    - EKS/survey-hpa.yaml
