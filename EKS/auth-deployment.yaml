@@ -24,7 +24,14 @@ spec:
         image: 205930629963.dkr.ecr.ap-northeast-2.amazonaws.com/ticket101-ecr:auth-latest
         imagePullPolicy: Always
         ports:
-        - containerPort: 5002        
+        - containerPort: 5002
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "256Mi"
+          limits:
+            cpu: "500m"
+            memory: "512Mi"      
         env:
             - name: FRONTEND_URL
               valueFrom:

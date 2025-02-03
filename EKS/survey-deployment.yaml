@@ -23,6 +23,13 @@ spec:
         
         ports:
           - containerPort: 5003
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "256Mi"
+          limits:
+            cpu: "500m"
+            memory: "512Mi"
         env:
             - name: FRONTEND_URL
               valueFrom:
